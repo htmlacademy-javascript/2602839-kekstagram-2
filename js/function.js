@@ -1,6 +1,6 @@
 // Функция для проверки длины строки.
 const checkingStringLength = function (someString, someNumber) {
-  return (someString.length < someNumber);
+  return (someString.length < someNumber) ? 'true' : 'false';
 };
 
 
@@ -16,7 +16,7 @@ const chekingPolindrome = function (poliString) {
   const cleanedString = poliString.toLowerCase().replace(/[^a-zа-яё0-9]/g, '');
 
 
-  return (cleanedString === cleanedString.split('').reverse().join(''));
+  return (cleanedString === cleanedString.split('').reverse().join('')) ? 'true' : 'false';
 };
 
 
