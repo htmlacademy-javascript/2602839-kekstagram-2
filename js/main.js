@@ -195,7 +195,7 @@ console.table(generateCommentsPhoto());
 */
 const getPhotoUsers = () => ({
   id: generatePhotoId(),
-  url: generatePhotoUrl(),
+  url: `photos/${generatePhotoUrl()}.jpg`,
   description: getRandomElements(DESCRIPTIONS_PHOTO),
   likes: getRandomInteger(NUMBER_OF_LIKES.MIN, NUMBER_OF_LIKES.MAX),
   comments: generateCommentsPhoto(),
