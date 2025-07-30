@@ -120,10 +120,10 @@ const getRandomInteger = (a, b) => {
   return Math.floor(result);
 };
 
-// console.log(getRandomInteger(1,6));
-// console.log(getRandomInteger(15,200));
-// console.log(getRandomInteger(0,30));
-// console.log(getRandomInteger());
+console.log(getRandomInteger(1,6));
+console.log(getRandomInteger(15,200));
+console.log(getRandomInteger(0,30));
+console.log(getRandomInteger());
 
 
 /**Функция для генерации случайного элемента массива
@@ -131,20 +131,32 @@ const getRandomInteger = (a, b) => {
  * @param {string} result - элемент массива element
  */
 
+const getRandomElements = (elements) => elements[getRandomInteger(0, elements.length - 1)];
+
 
 /**Функция для генерации порядкого номера
  * @param {int} result - порядковый номер
  */
+const getIdGenerator = () => {
+  let firstGenerateId = 0;
+  return function () {
+    firstGenerateId += 1;
+    return firstGenerateId;
+  };
+};
+
+// console.log(getIdGenerator());
+
 
 /**Вызов функций для генерации порядкового номера
  * Надо вызвать функции для присвоения id
  * для Фото - номер фото
  * для URL - так как адрес будет отличаться только числом
  * для комментариев - номер комментария
- *
- *
- *
  */
+const generatePhotoId = getIdGenerator();
+const generatePhotoUrl = getIdGenerator();
+const generateCommentsId = getIdGenerator();
 
 /** Функция для создания комментария к фото
   * @param {int} id - идентификатор комментария
@@ -152,7 +164,20 @@ const getRandomInteger = (a, b) => {
   * @param {string} message - сам комментарий
   * @param {string} name - имя пользователя оставившего комментарий
   * @param {Array} return arrayComments[] - возвращает массив комментариев
+  *
+  *     {
+      id: 135,
+      avatar: 'img/avatar-6.svg',
+      message: 'В целом всё неплохо. Но не всё.',
+      name: 'Артём',
+    }
 */
+
+const generateCommentsPhoto = () => {
+
+};
+
+console.table(generateCommentsPhoto());
 
 
 /** Функция для создания объекта с описанием фотографии
@@ -162,6 +187,11 @@ const getRandomInteger = (a, b) => {
   * @param {int} likes - количество лайков
   * @param {Array} generateCommentsToPhoto() - массив комментариев
 */
+const getPhotoUsers = () => ({
+
+});
+
+console.table(getPhotoUsers());
 
 
 /** Функция для создания массива объектов длиной NUMBER_OF_ALL_PHOTO с описанием фотографий
