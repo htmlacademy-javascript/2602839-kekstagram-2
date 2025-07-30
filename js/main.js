@@ -65,3 +65,12 @@ const NUMBER_OF_LIKES = {
   MIN: 15,
   MAX: 200,
 };
+
+/**количество комментариев
+ * пределы выбраны по заданию
+ *
+ */
+const NUMBER_OF_ALL_COMMENTS = {
+  MIN: 0,
+  MAX: 30,
+};
