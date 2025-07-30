@@ -102,10 +102,10 @@ const getRandomInteger = (a, b) => {
   return Math.floor(result);
 };
 
-console.log(getRandomInteger(1,6));
-console.log(getRandomInteger(15,200));
-console.log(getRandomInteger(0,30));
-console.log(getRandomInteger());
+// console.log(getRandomInteger(1,6));
+// console.log(getRandomInteger(15,200));
+// console.log(getRandomInteger(0,30));
+// console.log(getRandomInteger());
 
 
 /**Функция для генерации случайного элемента массива
@@ -214,4 +214,6 @@ const getPhotoUsers = () => ({
 */
 const getAllPhotoUsers = () => Array.from({ length: NUMBER_OF_ALL_PHOTO }, getPhotoUsers);
 
-console.table(getAllPhotoUsers());
+// console.table(getAllPhotoUsers());
+
+getAllPhotoUsers();
