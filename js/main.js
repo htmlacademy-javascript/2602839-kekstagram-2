@@ -113,6 +113,17 @@ const DESCRIPTIONS_PHOTO = [
  * @param {int} b - верхняя граница диапозона
  * @param {int} result - возвращает случайное число в диапозоне от а до b
  */
+const getRandomInteger = (a, b) => {
+  const lower = Math.ceil(Math.min(a, b));
+  const upper = Math.floor(Math.max(a, b));
+  const result = Math.random() * (upper - lower + 1) + lower;
+  return Math.floor(result);
+};
+
+// console.log(getRandomInteger(1,6));
+// console.log(getRandomInteger(15,200));
+// console.log(getRandomInteger(0,30));
+// console.log(getRandomInteger());
 
 
 /**Функция для генерации случайного элемента массива
