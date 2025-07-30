@@ -161,13 +161,12 @@ const generateCommentsId = getIdGenerator();
 
       Для формирования текста комментария — message — вам необходимо взять одно или два случайных предложения из представленных ниже:
 */
-
 const generateCommentsPhoto = () => {
   const arrayComments = [];
   for (let i = 0; i < getRandomInteger(NUMBER_OF_ALL_COMMENTS.MIN, NUMBER_OF_ALL_COMMENTS.MAX); i++) {
     arrayComments.push({
       id: generateCommentsId(),
-      avatar: getRandomInteger(NUMBER_OF_ALL_AVATAR.MIN, NUMBER_OF_ALL_AVATAR.MAX),
+      avatar: `img/avatar-${getRandomInteger(NUMBER_OF_ALL_AVATAR.MIN, NUMBER_OF_ALL_AVATAR.MAX)}.svg`,
       message: getRandomElements(MESSAGES),
       name: getRandomElements(USERS_NAME),
     });
@@ -207,4 +206,4 @@ console.table(getPhotoUsers());
 */
 const getAllPhotoUsers = () => Array.from({ length: NUMBER_OF_ALL_PHOTO }, getPhotoUsers);
 
-getAllPhotoUsers();
+console.table(getAllPhotoUsers());
