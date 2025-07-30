@@ -174,7 +174,7 @@ const generateCommentsPhoto = () => {
   return arrayComments;
 };
 
-console.table(generateCommentsPhoto());
+// console.table(generateCommentsPhoto());
 
 
 /** Функция для создания объекта с описанием фотографии
@@ -201,7 +201,7 @@ const getPhotoUsers = () => ({
   comments: generateCommentsPhoto(),
 });
 
-console.table(getPhotoUsers());
+// console.table(getPhotoUsers());
 // console.table(getPhotoUsers());
 // console.table(getPhotoUsers());
 // console.table(getPhotoUsers());
