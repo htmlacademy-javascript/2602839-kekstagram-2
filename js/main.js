@@ -163,7 +163,16 @@ const generateCommentsId = getIdGenerator();
 */
 
 const generateCommentsPhoto = () => {
-
+  const arrayComments = [];
+  for (let i = 0; i < getRandomInteger(NUMBER_OF_ALL_COMMENTS.MIN, NUMBER_OF_ALL_COMMENTS.MAX); i++) {
+    arrayComments.push({
+      id: generateCommentsId(),
+      avatar: getRandomInteger(NUMBER_OF_ALL_AVATAR.MIN, NUMBER_OF_ALL_AVATAR.MAX),
+      message: getRandomElements(MESSAGES),
+      name: getRandomElements(USERS_NAME),
+    });
+  }
+  return arrayComments;
 };
 
 console.table(generateCommentsPhoto());
