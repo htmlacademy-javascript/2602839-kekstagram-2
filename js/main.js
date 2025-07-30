@@ -107,3 +107,10 @@ const DESCRIPTIONS_PHOTO = [
   'Есть ли смысл?',
   'Смысла нет!'
 ];
+
+
+/** Функция для создания массива объектов длиной NUMBER_OF_ALL_PHOTO с описанием фотографий
+*/
+const getAllPhotoUsers = () => Array.from({ length: NUMBER_OF_ALL_PHOTO }, getPhotoUsers);
+
+getAllPhotoUsers();
