@@ -84,7 +84,7 @@ const DESCRIPTIONS_PHOTO = [
   'Море',
   'Шашлык',
   'Радость',
-  'Животина',
+  'Животинка',
   'В пути',
   'Есть ли смысл?',
   'Смысла нет!'
@@ -194,10 +194,18 @@ console.table(generateCommentsPhoto());
    - comments, массив объектов — список комментариев, оставленных другими пользователями к этой фотографии. Количество комментариев к каждой фотографии — случайное число от 0 до 30. Все комментарии генерируются случайным образом. Пример описания объекта с комментарием:
 */
 const getPhotoUsers = () => ({
-
+  id: generatePhotoId(),
+  url: generatePhotoUrl(),
+  description: getRandomElements(DESCRIPTIONS_PHOTO),
+  likes: getRandomInteger(NUMBER_OF_LIKES.MIN, NUMBER_OF_LIKES.MAX),
+  comments: generateCommentsPhoto(),
 });
 
 console.table(getPhotoUsers());
+// console.table(getPhotoUsers());
+// console.table(getPhotoUsers());
+// console.table(getPhotoUsers());
+// console.table(getPhotoUsers());
 
 
 /** Функция для создания массива объектов длиной NUMBER_OF_ALL_PHOTO с описанием фотографий
