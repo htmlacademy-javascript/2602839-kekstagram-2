@@ -56,3 +56,12 @@ const MESSAGES = [
  *
  */
 const NUMBER_OF_ALL_PHOTO = 25;
+
+/**количество лайков
+ * пределы выбраны по заданию
+ *
+ */
+const NUMBER_OF_LIKES = {
+  MIN: 15,
+  MAX: 200,
+};
