@@ -74,3 +74,12 @@ const NUMBER_OF_ALL_COMMENTS = {
   MIN: 0,
   MAX: 30,
 };
+
+/**Количество аватарок
+ * пределы выбраны по заданию
+ *
+ */
+const NUMBER_OF_ALL_AVATAR = {
+  MIN: 1,
+  MAX: 6,
+};
