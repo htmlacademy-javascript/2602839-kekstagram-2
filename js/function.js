@@ -1,4 +1,8 @@
-// Функция для проверки длины строки.
+/**Функция для проверки длины строки. Она принимает строку, которую нужно проверить, и максимальную длину и возвращает true, если строка меньше или равна указанной длине, и false, если строка длиннее.
+ * @param {int} maxLength - длина строки для проверки
+ * @param {string} someString - какая-то строка
+ * @return {boolean} - истина, если строка меньше либо равна заданой длине
+ */
 const checkingStringLength = function (someString, someNumber) {
   return (someString.length < someNumber);
 };
@@ -9,7 +13,10 @@ checkingStringLength ('проверяемая строка', 18);
 checkingStringLength ('проверяемая строка', 10);
 
 
-// Функция для проверки, является ли строка палиндромом
+/**Функция для проверки, является ли строка палиндромом.
+ * @param {string} polindrome - проверяемая строка
+ * @returns {boolean} - истина, если полиндром
+ */
 const chekingPolindrome = function (poliString) {
 
   // Приводим строку к нижнему регистру и удаляем все небуквенно-цифровые символы
@@ -34,8 +41,11 @@ chekingPolindrome('Коту скоро сорок суток');
 chekingPolindrome('Я — арка края');
 chekingPolindrome('Умер, и мир ему');
 
-//Функция принимает строку, извлекает содержащиеся в ней цифры от 0 до 9 и возвращает их в виде целого положительного числа.
 
+/**Функция принимает строку, извлекает содержащиеся в ней цифры от 0 до 9 и возвращает их в виде целого положительного числа.
+ * @param {string} extString - ghjdthzt
+ * @returns {Integer} - возвращаемое число в формате Integer
+ */
 const extractingDigits = function (extString) {
   let result = '';
   let tempString;
