@@ -80,7 +80,8 @@ extractingDigits (1.5);
 extractingDigits ('!');
 extractingDigits ('');
 
-/** Делу — время
+/**
+ * Делу — время
 */
 
 /**Функция для перевода времени на часах в минуты
