@@ -101,3 +101,21 @@ extractingDigits ('');
 имяФункции('14:00', '17:30', '08:0', 90);  // false
 имяФункции('8:00', '17:30', '08:00', 900); // false
 */
+
+/**Функция для проверки происходит ли встреча в рабочее время
+ * @param {string} startWork - начало рабочего времени
+ * @param {string} endWork - конец рабочего времени
+ * @param {string} startMetting - начало встречи
+ * @param {number} timeMeeting - время встречи
+ * @result {boolean} - возвращает значение была ли встреча в рабочее время
+ */
+
+const getWorkTimeMeeting = () => {
+
+};
+
+console.log(getWorkTimeMeeting('08:00', '17:30', '14:00', 90));
+console.log(getWorkTimeMeeting('8:0', '10:0', '8:0', 120));
+console.log(getWorkTimeMeeting('08:00', '14:30', '14:00', 90));
+console.log(getWorkTimeMeeting('14:00', '17:30', '08:0', 90));
+console.log(getWorkTimeMeeting('8:00', '17:30', '08:00', 900));
