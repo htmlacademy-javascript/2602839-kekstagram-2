@@ -102,6 +102,27 @@ extractingDigits ('');
 имяФункции('8:00', '17:30', '08:00', 900); // false
 */
 
+/**Функция для перевода времени на часах в минуты
+ * @param {string} time - исходное время '08:00'
+ * @result {int} - возвращает значение в минутах
+ *
+ * @example
+ * getTimeInMinutes('02:30') // 150 (2*60 + 30)
+ * getTimeInMinutes('12:00') // 720 (12*60 + 0)
+ * getTimeInMinutes('00:05') // 5 (0*60 + 5)
+ *
+ * @description
+ * 1.Функция принимает строку time в формате "HH:MM"
+ * 2.Метод split(':') разделяет строку по двоеточию на массив из двух строк
+ * 3.map(Number) преобразует строковые значения в числа
+ * 4.Деструктуризация присваивает часы в переменную hours, минуты - в minutes
+ * 5.Возвращается результат вычисления hours * 60 + minutes
+ */
+const getTimeInMinutes = (time) => {
+  const [hours, minutes] = time.split(':').map(Number);
+  return hours * 60 + minutes;
+};
+
 /**Функция для проверки происходит ли встреча в рабочее время
  * @param {string} startWork - начало рабочего времени
  * @param {string} endWork - конец рабочего времени
