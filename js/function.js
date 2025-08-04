@@ -80,3 +80,55 @@ extractingDigits (1.5);
 extractingDigits ('!');
 extractingDigits ('');
 
+/**
+ * Делу — время
+*/
+
+/**Функция для перевода времени на часах в минуты
+ * @param {string} time - исходное время '08:00'
+ * @result {int} - возвращает значение в минутах
+ *
+ * @example
+ * getTimeInMinutes('02:30') // 150 (2*60 + 30)
+ * getTimeInMinutes('12:00') // 720 (12*60 + 0)
+ * getTimeInMinutes('00:05') // 5 (0*60 + 5)
+ *
+ * @description
+ * 1.Функция принимает строку time в формате "HH:MM"
+ * 2.Метод split(':') разделяет строку по двоеточию на массив из двух строк
+ * 3.map(Number) преобразует строковые значения в числа
+ * 4.Деструктуризация присваивает часы в переменную hours, минуты - в minutes
+ * 5.Возвращается результат вычисления hours * 60 + minutes
+ */
+const getTimeInMinutes = (time) => {
+  const [hours, minutes] = time.split(':').map(Number);
+  return hours * 60 + minutes;
+};
+
+/**Функция для проверки происходит ли встреча в рабочее время
+ * @param {string} startWork - начало рабочего времени
+ * @param {string} endWork - конец рабочего времени
+ * @param {string} startMetting - начало встречи
+ * @param {number} timeMeeting - время встречи
+ * @result {boolean} - возвращает значение была ли встреча в рабочее время
+ *
+ * @example
+ * '8:00' - начало рабочего дня
+ * '17:30' - конец рабочего дня
+ * '14:00' - начало встречи
+ * 90 - продолжительность встречи в минутах
+ *
+ * @description
+ * - Функция принимает время начала и конца рабочего дня, а также время старта и продолжительность встречи в минутах и возвращает true, если встреча не выходит за рамки рабочего дня, и false, если выходит.
+ * - Время указывается в виде строки в формате часы:минуты. Для указания часов и минут могут использоваться как две цифры, так и одна. Например, 8 часов 5 минут могут быть указаны по-разному: 08:05, 8:5, 08:5 или 8:05.
+ * - Продолжительность задаётся целым положительным числом. Гарантируется, что и рабочий день, и встреча укладываются в одни календарные сутки.
+ */
+
+const getWorkTimeMeeting = (startWork, endWork, startMetting, timeMeeting) => (getTimeInMinutes(startWork) <= getTimeInMinutes(startMetting) && getTimeInMinutes(startMetting) <= (getTimeInMinutes(endWork) - timeMeeting));
+
+// console.log(getWorkTimeMeeting('08:00', '17:30', '14:00', 90));
+// console.log(getWorkTimeMeeting('8:0', '10:0', '8:0', 120));
+// console.log(getWorkTimeMeeting('08:00', '14:30', '14:00', 90));
+// console.log(getWorkTimeMeeting('14:00', '17:30', '08:0', 90));
+// console.log(getWorkTimeMeeting('8:00', '17:30', '08:00', 900));
+getWorkTimeMeeting();
