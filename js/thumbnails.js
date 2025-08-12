@@ -15,27 +15,50 @@
     Подключите модуль в проект.
 */
 
-/*  #picture
-    разметка в index.html
-    смотри строчки с 200 по 209
+import { getAllPhotoUsers } from './data.js';
 
-  <template id="picture">
-    <a href="#" class="picture">
-      <img class="picture__img" src="" width="182" height="182" alt="Случайная фотография">
-      <p class="picture__info">
-        <span class="picture__comments"></span>
-        <span class="picture__likes"></span>
-      </p>
-    </a>
-  </template>
-*/
+const pictureTemplate = document.querySelector('#picture').content;
+const container = document.querySelector('.pictures');
+
+
+// 3.Как и чем заполнить данными для фотографии
+/**
+ * Функция для создания DOM-элемента миниатюры фотографии
+ * @param {object} photo - объект с данными фотографии
+ * @param {number} photo.id - идентификатор фотографии
+ * @param {string} photo.url - URL изображения
+ * @param {string} photo.description - описание фотографии
+ * @param {number} photo.likes - количество лайков
+ * @param {Array} photo.comments - массив комментариев
+ * @returns {DocumentFragment} - клонированный шаблон с заполненными данными
+ */
+const createThumbnail = ({id, url, description, likes, comments}) => {
+  const pictureElement = pictureTemplate.cloneNode(true);
+  const picture = pictureElement.querySelector('.picture');
+  const pictureImg = pictureElement.querySelector('.picture__img');
+
+  picture.dataset.photoId = id; // Лучше использовать data-атрибут для ID
+  pictureImg.src = url;
+  pictureImg.alt = description;
+  pictureElement.querySelector('.picture__likes').textContent = likes;
+  pictureElement.querySelector('.picture__comments').textContent = comments.length;
+
+  return pictureElement;
+};
 
 /**Функция для отрисовки мини-фото
  * @param {Array} массив фотографий, каждая должная содержать все необходимые параметры
  * @returns {Element} возврат готового элемента для вставки в DOM
  */
-const generateThumbnails = () => {
+const renderThumbnails = (pictures) => {
 
+  const fragment = document.createDocumentFragment();
+
+  pictures.forEach((photo) => {
+    fragment.appendChild(createThumbnail(photo));
+  });
+
+  container.appendChild(fragment);
 };
 
-export { generateThumbnails };
+export { renderThumbnails };

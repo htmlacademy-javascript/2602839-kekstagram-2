@@ -1,5 +1,6 @@
 import { getAllPhotoUsers } from './data.js';
-import { generateThumbnails } from './thumbnails.js';
+import { renderThumbnails } from './thumbnails.js';
 
 //генерируем миниатюры с данными юзеров
-generateThumbnails(getAllPhotoUsers());
+const photos = getAllPhotoUsers();
+renderThumbnails(photos);
