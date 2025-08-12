@@ -15,8 +15,6 @@
     Подключите модуль в проект.
 */
 
-import { getAllPhotoUsers } from './data.js';
-
 const pictureTemplate = document.querySelector('#picture').content;
 const container = document.querySelector('.pictures');
 
@@ -46,9 +44,42 @@ const createThumbnail = ({id, url, description, likes, comments}) => {
   return pictureElement;
 };
 
-/**Функция для отрисовки мини-фото
- * @param {Array} массив фотографий, каждая должная содержать все необходимые параметры
- * @returns {Element} возврат готового элемента для вставки в DOM
+/**
+ *Рендерит миниатюры фотографий в указанный контейнер
+ *
+ * @function
+ * @param {Object[]} pictures - Массив объектов с данными фотографий
+ * @param {number} pictures[].id - Уникальный идентификатор фотографии
+ * @param {string} pictures[].url - URL изображения (относительный путь)
+ * @param {string} pictures[].description - Описание фотографии (для атрибута alt)
+ * @param {number} pictures[].likes - Количество лайков
+ * @param {Object[]} pictures[].comments - Массив комментариев
+ * @example
+ * // Пример вызова
+ * const photos = [
+ *   {
+ *     id: 1,
+ *     url: 'photos/1.jpg',
+ *     description: 'Красивый закат',
+ *     likes: 42,
+ *     comments: [
+ *       {
+ *         id: 101,
+ *         avatar: 'img/avatar-3.svg',
+ *         message: 'Отличное фото!',
+ *         name: 'Анна'
+ *       }
+ *     ]
+ *   }
+ * ];
+ * renderThumbnails(photos);
+ *
+ * @description
+ * 1. Использует шаблон для id="picture" из файла index.html
+ * 2. Создает DocumentFragment для вставки
+ * 3. Для каждой фотографии создает DOM-элемент на основе шаблона #picture
+ * 4. Отображает количество лайков и комментариев
+ * 5. Добавляет data-атрибут с ID фотографии, но это не обязательно
  */
 const renderThumbnails = (pictures) => {
 
