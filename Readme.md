@@ -2,7 +2,7 @@
 
 * Студент: [Александр Колесников](https://up.htmlacademy.ru/javascript-individual/2/user/2602839).
 * Наставник: [Давид Чачанов](https://htmlacademy.ru/profile/id2355549).
-* Ссылка на проект: (https://up.htmlacademy.ru/assets/intensives/javascript-individual/2/projects/kekstagram/image.jpg?v=202506050446)
+<img width="769" alt="заставка Кекстаграмм" src="https://up.htmlacademy.ru/assets/intensives/javascript-individual/2/projects/kekstagram/image.jpg?v=202506050446">
 
 ---
 
