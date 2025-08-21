@@ -51,13 +51,6 @@ const createThumbnail = ({id, url, description, likes, comments}) => {
   pictureElement.querySelector('.picture__likes').textContent = likes; // количество лайков
   pictureElement.querySelector('.picture__comments').textContent = comments.length; // количество комментариев
 
-  /*
-  Задача
-
-    Окно должно открываться при клике на миниатюру. Данные для окна (изображение, комментарии, лайки и так далее) берите из того же объекта, который использовался для отрисовки соответствующей миниатюры.
-
-  */
-
   pictureImg.addEventListener('click', () => {
     openBigPic({id, url, likes, description, comments});
   });
