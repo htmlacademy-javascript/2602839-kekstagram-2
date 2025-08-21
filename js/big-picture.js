@@ -123,11 +123,11 @@ const openBigPic = ({url, likes, description, comments}) => {
   document.addEventListener('keydown', onDocumentKeydown);
   closeButton.addEventListener('click', onCloseButtonClick);
 
-  // присваивание URL
-  // количество лайков
-  // массив комменатриев
+  fullSizePhoto.querySelector('.big-picture__img').src = url; // присваивание URL
+  fullSizePhoto.querySelector('.likes-count').textContent = likes; // количество лайков
+  fullSizePhoto.querySelector('.comments-count').textContent = comments.length; // массив комменатриев
   renderComments(comments);
-  // описание description
+  fullSizePhoto.querySelector('.social__caption').textContent = description; // описание description
 };
 
 /*
