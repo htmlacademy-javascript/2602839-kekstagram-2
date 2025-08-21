@@ -1,19 +1,4 @@
-/*Задача
-
-Отобразить фотографии других пользователей.
-
-    Заведите модуль, который будет отвечать за отрисовку миниатюр.
-
-    На основе временных данных для разработки и шаблона #picture создайте DOM-элементы, соответствующие фотографиям, и заполните их данными:
-        Адрес изображения url подставьте как атрибут src изображения.
-        Описание изображения description подставьте в атрибут alt изображения.
-        Количество лайков likes выведите в блок .picture__likes.
-        Количество комментариев comments выведите в блок .picture__comments.
-
-    Отрисуйте сгенерированные DOM-элементы в блок .pictures. Для вставки элементов используйте DocumentFragment.
-
-    Подключите модуль в проект.
-*/
+import { openBigPic } from '../js/big-picture.js';
 
 /* Ищем в DOM элемент с id="picture" (шаблон <template>)
       получаем ссылку на элемент-шаблон
@@ -65,6 +50,10 @@ const createThumbnail = ({id, url, description, likes, comments}) => {
   pictureImg.alt = description; // атрибут alt изображения
   pictureElement.querySelector('.picture__likes').textContent = likes; // количество лайков
   pictureElement.querySelector('.picture__comments').textContent = comments.length; // количество комментариев
+
+  pictureImg.addEventListener('click', () => {
+    openBigPic({id, url, likes, description, comments});
+  });
 
   return pictureElement;
 };
