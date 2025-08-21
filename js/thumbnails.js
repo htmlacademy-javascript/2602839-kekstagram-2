@@ -58,7 +58,7 @@ const createThumbnail = ({id, url, description, likes, comments}) => {
 
   */
 
-  pictureElement.addEventListener('click', () => {
+  pictureImg.addEventListener('click', () => {
     openBigPic({url, likes, description, comments});
   });
 
