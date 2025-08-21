@@ -19,6 +19,7 @@ const closeButton = fullSizePhoto.querySelector('.big-picture__cancel'); // кн
 const commentsList = fullSizePhoto.querySelector('.social__comments'); // список комметариев
 const commentItem = commentsList.querySelector('.social__comment'); // конкретно комментарии в списке
 
+let comments = []; // переменная для комментариев в этом модуле
 
 /*
 Задача
@@ -117,11 +118,16 @@ const renderComments = (comments) => {
  * @param {int} likes - количество лайков
  * @param {Array} comments - массив комментариев делали в data.js
  */
-const openBigPic = ({url, likes, description, comments}) => {
-  fullSizePhoto.classList.remove('hidden');
-  document.body.classList.add('overflow-hidden');
-  document.addEventListener('keydown', onDocumentKeydown);
-  closeButton.addEventListener('click', onCloseButtonClick);
+const openBigPic = (data) => {
+  commentsList.innerHTML = '';
+  comments = data.comments;
+  fullSizePhoto.classList.remove('hidden'); // убираем у большой фото класс hidden
+  document.body.classList.add('modal-open'); // добавляем для body класс модалка открыта
+  document.addEventListener('keydown', onDocumentKeydown); // ожидаем нажатия кнопки
+  closeButton.addEventListener('click', onCloseButtonClick); // ожидаем клика по кнопке закрытия модалки
+
+  // рендер картинок перенести в отельную фнкцию
+  // рендер комментариев перенести в отджельную функцию
 
   fullSizePhoto.querySelector('.big-picture__img').src = url; // присваивание URL
   fullSizePhoto.querySelector('.likes-count').textContent = likes; // количество лайков
