@@ -14,10 +14,14 @@
 
 import { EscKey } from './utils.js';
 
-const fullSizePhoto = document.querySelector('.big-picture');
+const fullSizePhoto = document.querySelector('.big-picture');//Большое всплывающее окно
 const closeButton = fullSizePhoto.querySelector('.big-picture__cancel'); // кнопка закрытия
 const commentsList = fullSizePhoto.querySelector('.social__comments'); // список комметариев
-const commentItem = commentsList.querySelector('.social__comment'); // конкретно комментарии в списке
+const commentItem = commentsList.querySelector('.social__comment'); // конкретно комментарий в списке
+
+const socialCommentShownCount = fullSizePhoto.querySelector('.social__comment-shown-count'); // сколько показано комментов в данный момент
+const socialCommentTotalCount = fullSizePhoto.querySelector('.social__comment-total-count'); // сколько всего комментов в карточке
+const socialCommentCount = fullSizePhoto.querySelector('.social__comment-count');
 
 let comments = []; // переменная для комментариев в этом модуле
 
@@ -36,6 +40,7 @@ let comments = []; // переменная для комментариев в э
 const closeBigPic = () => {
   fullSizePhoto.classList.add('hidden');
   document.body.classList.remove('overflow-hidden');
+  document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
   closeButton.removeEventListener('click', onCloseButtonClick);
 };
@@ -72,21 +77,41 @@ function onCloseButtonClick() {
 */
 
 /**
- * Функция создания-отрисовки массива-списка комментариев
- * @param {Array} comments - передаем массив комментарием для создания.
- */
-const renderComments = (comments) => {
-  const commentsListFragment = document.createDocumentFragment();
-  comments.forEach(({avatar, name, message}) => {
-    const comment = commentItem.cloneNode(true);
-    const commentPicture = comment.querySelector('.social__picture');
-    commentPicture.src = avatar;
-    commentPicture.alt = name;
-    comment.querySelector('.social__text').innerText = message;
-    commentsList.append(comment);
-  });
-  commentsList.append(commentsListFragment);
+ * Функция создания одного комментария
+ * @param {object}
+ * @returns {object}
+*/
+const createComment = ({ avatar, name, message }) => {
+  const comment = commentItem.cloneNode(true);
+  const avatarPicture = comment.querySelector('.social__picture');
+  avatarPicture.src = avatar;
+  avatarPicture.alt = name;
+  comment.querySelector('.social__text').textContent = message;
+
+  return comment;
 };
+
+
+/**
+ * Функция создания-отрисовки массива-списка комментариев
+ *
+ */
+const renderComments = () => {
+
+  const commentsFragment = document.createDocumentFragment();
+  commentsList.innerHTML = '';
+  for (let i = 0; i < comments.length; i++) {
+    const comment = createComment(comments[i]);
+    commentsFragment.append(comment);
+  }
+
+  commentsList.append(commentsFragment);
+
+  socialCommentShownCount.textContent = comments.length;
+  socialCommentTotalCount.textContent = comments.length;
+
+};
+
 
 /*
 Задача
@@ -110,12 +135,25 @@ const renderComments = (comments) => {
 
 */
 
-/**
- * Отрисовка модального окошка. Работаем с классами. Добавляем и убираем.
- * @param {int} id - идентификатор фотографии
+
+/**Функция по отрисовки карточки при открытии в модалке
+ *
  * @param {string} url - ссылка на фотографию
  * @param {string} description - описание фотографии
  * @param {int} likes - количество лайков
+  */
+
+const renderPictureInformation = ({url, likes, description}) => {
+  fullSizePhoto.querySelector('.big-picture__img img').src = url;
+  fullSizePhoto.querySelector('.big-picture__img img').alt = description;
+  fullSizePhoto.querySelector('.likes-count').textContent = likes;
+  fullSizePhoto.querySelector('.social__caption').textContent = description;
+};
+
+
+/**
+ * Отрисовка модального окошка. Работаем с классами. Добавляем и убираем.
+ * @param {int} id - идентификатор фотографии
  * @param {Array} comments - массив комментариев делали в data.js
  */
 const openBigPic = (data) => {
@@ -126,14 +164,10 @@ const openBigPic = (data) => {
   document.addEventListener('keydown', onDocumentKeydown); // ожидаем нажатия кнопки
   closeButton.addEventListener('click', onCloseButtonClick); // ожидаем клика по кнопке закрытия модалки
 
-  // рендер картинок перенести в отельную фнкцию
-  // рендер комментариев перенести в отджельную функцию
+  renderPictureInformation(data); // рендер картинок перенести в отельную фнкцию
+  renderComments(data.comments); // рендер комментариев перенести в отджельную функцию
 
-  fullSizePhoto.querySelector('.big-picture__img').src = url; // присваивание URL
-  fullSizePhoto.querySelector('.likes-count').textContent = likes; // количество лайков
-  fullSizePhoto.querySelector('.comments-count').textContent = comments.length; // массив комменатриев
-  renderComments(comments);
-  fullSizePhoto.querySelector('.social__caption').textContent = description; // описание description
+  socialCommentCount.textContent = `${socialCommentShownCount.textContent} из ${socialCommentTotalCount.textContent} комментариев`;
 };
 
 /*
