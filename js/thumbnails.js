@@ -1,4 +1,4 @@
-
+import { openBigPic } from '../js/big-picture.js';
 
 /* Ищем в DOM элемент с id="picture" (шаблон <template>)
       получаем ссылку на элемент-шаблон
@@ -50,6 +50,17 @@ const createThumbnail = ({id, url, description, likes, comments}) => {
   pictureImg.alt = description; // атрибут alt изображения
   pictureElement.querySelector('.picture__likes').textContent = likes; // количество лайков
   pictureElement.querySelector('.picture__comments').textContent = comments.length; // количество комментариев
+
+  /*
+  Задача
+
+    Окно должно открываться при клике на миниатюру. Данные для окна (изображение, комментарии, лайки и так далее) берите из того же объекта, который использовался для отрисовки соответствующей миниатюры.
+
+  */
+
+  pictureElement.addEventListener('click', () => {
+    openBigPic({url, likes, description, comments});
+  });
 
   return pictureElement;
 };

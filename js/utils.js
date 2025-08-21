@@ -24,4 +24,16 @@ const getRandomInteger = (a, b) => {
  */
 const getRandomElements = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
-export {getRandomElements, getRandomInteger};
+
+/*
+Задача
+Напишите код для закрытия окна по нажатию клавиши Esc и клике по иконке закрытия.
+*/
+
+/**Фуннкция обнаружения нажатия клавиши "Esc"
+ * @param {key} evt - нажата клавиша
+ * @returns {boolean} - ИСТИНА если клавиша "Esc"
+*/
+const EscKey = (evt) => evt.key === 'Escape';
+
+export {getRandomElements, getRandomInteger, EscKey};
