@@ -33,7 +33,10 @@ const commentItem = commentsList.querySelector('.social__comment'); // конк�
  */
 
 const closeBigPic = () => {
-
+  fullSizePhoto.classList.add('hidden');
+  document.body.classList.remove('overflow-hidden');
+  document.removeEventListener('keydown', onDocumentKeydown);
+  closeButton.removeEventListener('click', onCloseButtonClick);
 };
 
 /**
@@ -41,7 +44,10 @@ const closeBigPic = () => {
  * @param {Event} evt - событие нажатие кнопки Esc
  */
 function onDocumentKeydown(evt) {
-
+  if (EscKey(evt)) {
+    evt.preventDefault();
+    closeBigPic();
+  }
 }
 
 /**
@@ -69,7 +75,16 @@ function onCloseButtonClick() {
  * @param {Array} comments - передаем массив комментарием для создания.
  */
 const renderComments = (comments) => {
-
+  const commentsListFragment = document.createDocumentFragment();
+  comments.forEach(({avatar, name, message}) => {
+    const comment = commentItem.cloneNode(true);
+    const commentPicture = comment.querySelector('.social__picture');
+    commentPicture.src = avatar;
+    commentPicture.alt = name;
+    comment.querySelector('.social__text').innerText = message;
+    commentsList.append(comment);
+  });
+  commentsList.append(commentsListFragment);
 };
 
 /*
@@ -103,7 +118,16 @@ const renderComments = (comments) => {
  * @param {Array} comments - массив комментариев делали в data.js
  */
 const openBigPic = ({url, likes, description, comments}) => {
+  fullSizePhoto.classList.remove('hidden');
+  document.body.classList.add('overflow-hidden');
+  document.addEventListener('keydown', onDocumentKeydown);
+  closeButton.addEventListener('click', onCloseButtonClick);
 
+  // присваивание URL
+  // количество лайков
+  // массив комменатриев
+  renderComments(comments);
+  // описание description
 };
 
 /*
