@@ -9,7 +9,12 @@ import { EscKey } from './utils.js';
     В модуле, который отвечает за отрисовку окна с полноразмерным изображением, доработайте код по выводу списка комментариев таким образом, чтобы список показывался не полностью, а по 5 элементов, и следующие 5 элементов добавлялись бы по нажатию на кнопку «Загрузить ещё». Не забудьте реализовать обновление числа показанных комментариев в блоке .social__comment-count.
 
     Обратите внимание, хотя кнопка называется «Загрузить ещё», никакой загрузки с сервера не происходит. Просто показываются следующие 5 комментариев из списка.
+
+
 */
+
+
+const COMMENTS_PER_PORTION = 5; // порция комментов по сколько будем выводить
 
 const fullSizePhoto = document.querySelector('.big-picture');//Большое всплывающее окно
 const closeButton = fullSizePhoto.querySelector('.big-picture__cancel'); // кнопка закрытия
@@ -18,10 +23,12 @@ const commentItem = commentsList.querySelector('.social__comment'); // конк�
 
 const socialCommentShownCount = fullSizePhoto.querySelector('.social__comment-shown-count'); // сколько показано комментов в данный момент
 const socialCommentTotalCount = fullSizePhoto.querySelector('.social__comment-total-count'); // сколько всего комментов в карточке
-const socialCommentCount = fullSizePhoto.querySelector('.social__comment-count');
-const commentsLoader = fullSizePhoto.querySelector('.comments-loader');
+const socialCommentCount = fullSizePhoto.querySelector('.social__comment-count'); // место показывания кол-ва коммментов на модалке
+const commentsLoader = fullSizePhoto.querySelector('.comments-loader'); // кнопка "Загрузить ещё". Понадобиться для показывания порций комментов.
+
 
 let comments = []; // переменная для комментариев в этом модуле
+const commentsShown = 0; // счётчик комментов для модалки
 
 /**
  * функция закрытия картинок
@@ -91,6 +98,9 @@ const createComment = ({ avatar, name, message }) => {
  */
 const renderComments = () => {
 
+  // Надо что-то подумать с кнопкой, когда её показывать, а когда не надо показывать
+
+
   const commentsFragment = document.createDocumentFragment();
   commentsList.innerHTML = '';
   for (let i = 0; i < comments.length; i++) {
@@ -99,6 +109,9 @@ const renderComments = () => {
   }
 
   commentsList.append(commentsFragment);
+
+  // надо присваивать значения. Сколько мы показываем и сколько всего комментов.
+  // как мы поймём что нужно выводить-показывать новые комменты взамен старых ?
 
   socialCommentShownCount.textContent = comments.length;
   socialCommentTotalCount.textContent = comments.length;
@@ -132,7 +145,7 @@ const openBigPic = (data) => {
   document.body.classList.add('modal-open'); // добавляем для body класс модалка открыта
 
   // socialCommentCount.classList.add('hidden'); // прячем данные  по количеству комментов
-  // commentsLoader.classList.add('hidden'); // прячем кнопку загрузки комментов
+  // commentsLoader.classList.add('hidden'); // ПОКА прячем кнопку загрузки комментов
 
 
   document.addEventListener('keydown', onDocumentKeydown); // ожидаем нажатия кнопки
@@ -143,10 +156,5 @@ const openBigPic = (data) => {
 
   socialCommentCount.textContent = `${socialCommentShownCount.textContent} из ${socialCommentTotalCount.textContent} комментариев`;
 };
-
-/*
-Задача
-Подключите модуль в проект.
-*/
 
 export { openBigPic, closeBigPic };
