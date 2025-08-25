@@ -143,6 +143,16 @@ const renderPictureInformation = ({url, likes, description}) => {
   fullSizePhoto.querySelector('.social__caption').textContent = description;
 };
 
+/** Функция добавления комментов в список
+ *
+ * @param {*} dataComments
+ */
+
+const onCommentsLoadClick = (dataComments) => {
+  renderComments(dataComments);
+  socialCommentCount.textContent = `${socialCommentShownCount.textContent} из ${socialCommentTotalCount.textContent} комментариев`; // формирование вывода по кол-ву комментов
+};
+
 
 /**
  * Отрисовка модального окошка. Работаем с классами. Добавляем и убираем.
@@ -169,5 +179,10 @@ const openBigPic = (data) => {
 };
 
 // не работает загрузка по кнопке "Загрузить ещё" - надо исправлять
+
+//Ждём click для запуска отрисовки
+commentsLoader.addEventListener('click', () => {
+  onCommentsLoadClick(comments);
+});
 
 export { openBigPic, closeBigPic };
