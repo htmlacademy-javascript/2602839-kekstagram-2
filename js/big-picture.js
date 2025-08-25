@@ -28,7 +28,7 @@ const commentsLoader = fullSizePhoto.querySelector('.comments-loader'); // кн�
 
 
 let comments = []; // переменная для комментариев в этом модуле
-const commentsShown = 0; // счётчик комментов для модалки
+let commentsShown = 0; // счётчик комментов для модалки
 
 /**
  * функция закрытия картинок
@@ -38,11 +38,12 @@ const commentsShown = 0; // счётчик комментов для модал�
  */
 
 const closeBigPic = () => {
-  fullSizePhoto.classList.add('hidden');
-  document.body.classList.remove('overflow-hidden');
-  document.body.classList.remove('modal-open');
-  document.removeEventListener('keydown', onDocumentKeydown);
-  closeButton.removeEventListener('click', onCloseButtonClick);
+  fullSizePhoto.classList.add('hidden'); // дабавляем открытой модалке класс скрытый чтобы она изчезла
+  document.body.classList.remove('overflow-hidden'); // убираем класс чтобы можно было скроллить страницу
+  document.body.classList.remove('modal-open'); // убираем у body класс что модалка открыта
+  document.removeEventListener('keydown', onDocumentKeydown); // убираем отслеживание нажатия кнопки
+  closeButton.removeEventListener('click', onCloseButtonClick); // убираем отслеживание клика на крестик закрытия
+  commentsShown = 0; // обнуляем счётчик показываемый комментов для следующей фото
 };
 
 /**
@@ -100,21 +101,31 @@ const renderComments = () => {
 
   // Надо что-то подумать с кнопкой, когда её показывать, а когда не надо показывать
 
+  // показанные комменты количество
+  commentsShown += COMMENTS_PER_PORTION;
+
+  // проверяем сколько кол-во показанных больше или равно длине массива комментов
+  if (commentsShown >= comments.length) { // если количество показаннх больше чем длина ммассива комментов, то например длина массива комментов 3, а порция 5
+    commentsLoader.classList.add('hidden'); // прячем кнопку "Загрузить ещё"
+    commentsShown = comments.length; // количесов показанных равно длине массива комментов.
+  } else {
+    commentsLoader.classList.remove('hidden'); // иначе убираем скрытие кнопки "Загрузить ещё"
+  }
 
   const commentsFragment = document.createDocumentFragment();
   commentsList.innerHTML = '';
-  for (let i = 0; i < comments.length; i++) {
-    const comment = createComment(comments[i]);
-    commentsFragment.append(comment);
+  for (let i = 0; i < commentsShown; i++) { // теперь перебираем до длины кол-ва показанных
+    const comment = createComment(comments[i]); // вызываем функцию создания комментов
+    commentsFragment.append(comment); // дообавляем коммент в конец списка комментов
   }
 
-  commentsList.append(commentsFragment);
+  commentsList.append(commentsFragment); // добавляем единовременно весь список комментов
 
   // надо присваивать значения. Сколько мы показываем и сколько всего комментов.
   // как мы поймём что нужно выводить-показывать новые комменты взамен старых ?
 
-  socialCommentShownCount.textContent = comments.length;
-  socialCommentTotalCount.textContent = comments.length;
+  socialCommentShownCount.textContent = commentsShown; // сколько показываем
+  socialCommentTotalCount.textContent = comments.length; // общая длина массива комментов для этой фото
 
 };
 
@@ -139,7 +150,7 @@ const renderPictureInformation = ({url, likes, description}) => {
  * @param {Array} comments - массив комментариев делали в data.js
  */
 const openBigPic = (data) => {
-  commentsList.innerHTML = '';
+  // commentsList.innerHTML = '';
   comments = data.comments;
   fullSizePhoto.classList.remove('hidden'); // убираем у большой фото класс hidden
   document.body.classList.add('modal-open'); // добавляем для body класс модалка открыта
@@ -154,7 +165,9 @@ const openBigPic = (data) => {
   renderPictureInformation(data); // рендер картинок перенести в отельную фнкцию
   renderComments(data.comments); // рендер комментариев перенести в отджельную функцию
 
-  socialCommentCount.textContent = `${socialCommentShownCount.textContent} из ${socialCommentTotalCount.textContent} комментариев`;
+  socialCommentCount.textContent = `${socialCommentShownCount.textContent} из ${socialCommentTotalCount.textContent} комментариев`; // формирование вывода по кол-ву комментов
 };
+
+// не работает загрузка по кнопке "Загрузить ещё" - надо исправлять
 
 export { openBigPic, closeBigPic };
