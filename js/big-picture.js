@@ -1,4 +1,15 @@
 import { EscKey } from './utils.js';
+/*
+Задача
+
+Каждый объект с описанием фотографии содержит массив с комментариями. Данные из этого массива мы вывели в соответствующую область окна полноразмерного просмотра. Все бы хорошо, но для популярных фотографий комментариев может быть много. Если вывести их разом, то пользователю будет неудобно взаимодействовать с окном просмотра. Улучшить пользовательский интерфейс поможет кнопка «Загрузить ещё».
+
+    Покажите блоки счётчика комментариев .social__comment-count и загрузки новых комментариев .comments-loader, убрав у них класс hidden.
+
+    В модуле, который отвечает за отрисовку окна с полноразмерным изображением, доработайте код по выводу списка комментариев таким образом, чтобы список показывался не полностью, а по 5 элементов, и следующие 5 элементов добавлялись бы по нажатию на кнопку «Загрузить ещё». Не забудьте реализовать обновление числа показанных комментариев в блоке .social__comment-count.
+
+    Обратите внимание, хотя кнопка называется «Загрузить ещё», никакой загрузки с сервера не происходит. Просто показываются следующие 5 комментариев из списка.
+*/
 
 const fullSizePhoto = document.querySelector('.big-picture');//Большое всплывающее окно
 const closeButton = fullSizePhoto.querySelector('.big-picture__cancel'); // кнопка закрытия
@@ -120,8 +131,8 @@ const openBigPic = (data) => {
   fullSizePhoto.classList.remove('hidden'); // убираем у большой фото класс hidden
   document.body.classList.add('modal-open'); // добавляем для body класс модалка открыта
 
-  socialCommentCount.classList.add('hidden'); // прячем данные  по количеству комментов
-  commentsLoader.classList.add('hidden'); // прячем кнопку загрузки комментов
+  // socialCommentCount.classList.add('hidden'); // прячем данные  по количеству комментов
+  // commentsLoader.classList.add('hidden'); // прячем кнопку загрузки комментов
 
 
   document.addEventListener('keydown', onDocumentKeydown); // ожидаем нажатия кнопки
@@ -130,7 +141,7 @@ const openBigPic = (data) => {
   renderPictureInformation(data); // рендер картинок перенести в отельную фнкцию
   renderComments(data.comments); // рендер комментариев перенести в отджельную функцию
 
-  // socialCommentCount.textContent = `${socialCommentShownCount.textContent} из ${socialCommentTotalCount.textContent} комментариев`;
+  socialCommentCount.textContent = `${socialCommentShownCount.textContent} из ${socialCommentTotalCount.textContent} комментариев`;
 };
 
 /*
