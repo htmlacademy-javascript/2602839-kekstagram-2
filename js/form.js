@@ -47,7 +47,75 @@
 */
 
 /**
- * TODO Функция проверки форм?
- * TODO Проверка чего? НЕ понятно чего?
+ * TODO Функция проверки форм
+ * TODO Проверка чего хэштегов
+ * TODO Проверка комментариев
+ * * ВЫПОЛНЕНО: Модалка открывается и закрывается
  */
+
+import './validate.js';
+import { EscKey } from './utils.js';
+
+// Находим форму и необходимые элементы
+const form = document.querySelector('.img-upload__form');
+const overlay = document.querySelector('.img-upload__overlay');
+const cancelButton = document.querySelector('.img-upload__cancel');
+const fileInput = document.querySelector('.img-upload__input');
+//const hashtagInput = document.querySelector('.text__hashtags');
+//const commentInput = document.querySelector('.text__description');
+
+// Создаём экземпляр Pristine для валидации
+const pristine = new Pristine(form, {
+  classTo: 'img-upload__field-wrapper',
+  errorTextParent: 'img-upload__field-wrapper',
+  errorTextClass: 'img-upload__error-text'
+});
+
+// Функция открытия модального окна
+const openModal = () => {
+  overlay.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  document.addEventListener('keydown', onDocumentKeydown);
+};
+
+// Функция закрытия модального окна
+const closeModal = () => {
+  form.reset(); // Сбрасываем значения полей формы
+  pristine.reset(); // Сбрасываем ошибки валидации
+  overlay.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+  document.removeEventListener('keydown', onDocumentKeydown);
+};
+
+/**
+ * Обработчик нажатия клавиши Esc для закрытия модального окна
+ * @param {Event} evt - Событие клавиатуры
+ */
+function onDocumentKeydown(evt) {
+  if (EscKey(evt)) {
+    evt.preventDefault();
+    closeModal();
+  }
+}
+
+/**
+ * Обработчик клика по кнопке закрытия модального окна
+ */
+cancelButton.addEventListener('click', () => {
+  closeModal();
+});
+
+// Обработчик клика вне модального окна
+overlay.addEventListener('click', (evt) => {
+  if (evt.target === overlay) {
+    closeModal();
+  }
+});
+
+
+// Обработчик выбора файла
+fileInput.addEventListener('change', () => {
+  openModal();
+});
+
 
