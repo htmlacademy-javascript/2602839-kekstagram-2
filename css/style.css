@@ -366,6 +366,12 @@ main {
   outline: auto 5px highlight;
 }
 
+.pristine-error {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
 
 /* Окно для редактирования изображения
    ========================================================================== */
