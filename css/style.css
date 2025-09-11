@@ -366,11 +366,7 @@ main {
   outline: auto 5px highlight;
 }
 
-.img-upload__field-wrapper {
-  position: relative;
-}
-
-.img-upload__error-text {
+.pristine-error {
   color: red;
   font-size: 12px;
   margin-top: 5px;
