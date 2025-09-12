@@ -4,21 +4,24 @@ import {onDocumentKeydown} from './form.js';
  * КОНСТАНТЫ для валидации формы
  * @namespace
  */
-/** Максимальное количество хэштегов */
+/** @constant {number} Максимальное количество хэштегов */
 const MAX_HASHTAG_COUNT = 5;
-/** Максимальная длина описания в символах */
+/** @constant {number} Максимальная длина описания в символах */
 const MAX_DESCRIPTION_LENGTH = 140;
-/** Регулярное выражение для валидации хэштегов */
+/** @constant {RegExp} Регулярное выражение для валидации хэштегов */
 const VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
 
 /**
  * Основные DOM-элементы формы
  * @namespace
  */
-
-const imageUploadForm = document.querySelector('.img-upload__form'); // Форма.Точка входа в Форму
+/** @constant {HTMLFormElement} Форма. Точка входа в форму загрузки изображения */
+const imageUploadForm = document.querySelector('.img-upload__form');
+/** @constant {HTMLElement} Контейнер текстовых полей формы */
 const imageUploadText = document.querySelector('.img-upload__text');
+/** @constant {HTMLInputElement} Поле ввода хэштегов */
 const formHashtag = imageUploadText.querySelector('.text__hashtags');
+/** @constant {HTMLTextAreaElement} Поле ввода описания */
 const formDescription = imageUploadText.querySelector ('.text__description');
 
 
@@ -32,21 +35,21 @@ const pristine = new Pristine(imageUploadForm, {
 });
 
 /**
- * Нормализует строку хэштегов: удаляет пробелы и пустые элементы
- * @param {string} value - Строка хэштегов
+ * Нормализует строку хэштегов: удаляет пробелы по краям и пустые элементы
+ * @param {string} value - Строка хэштегов из input
  * @returns {string[]} Массив нормализованных хэштегов
  */
-const normalize = (value) => {
+const normalizeString = (value) => {
   const noNormalizeArray = value.trim().split(' ');
   return noNormalizeArray.filter((tag) => tag.length > 0);
 };
 
 /**
  * Проверяет валидность формата хэштегов
- * @param {string} textHashtag - Строка с хэштегами
- * @returns {boolean} true если все хэштеги соответствуют формату
+ * @param {string} textHashtag - Строка с хэштегами из input
+ * @returns {boolean} true если все хэштеги соответствуют формату, иначе false
  */
-const isValidateTextHashtag = (textHashtag) => normalize(textHashtag).every((tag) => VALID_SYMBOLS.test(tag));
+const isValidateTextHashtag = (textHashtag) => normalizeString(textHashtag).every((tag) => VALID_SYMBOLS.test(tag));
 
 // Добавляем валидатор формата хэштегов
 pristine.addValidator(
@@ -57,10 +60,10 @@ pristine.addValidator(
 
 /**
  * Проверяет количество хэштегов
- * @param {string} textHashtag - Строка с хэштегами
- * @returns {boolean} true если количество хэштегов не превышает лимит
+ * @param {string} textHashtag - Строка с хэштегами из input
+ * @returns {boolean} true если количество хэштегов не превышает лимит, иначе false
  */
-const isValidCountHashtag = (textHashtag) => normalize(textHashtag).length <= MAX_HASHTAG_COUNT;
+const isValidCountHashtag = (textHashtag) => normalizeString(textHashtag).length <= MAX_HASHTAG_COUNT;
 
 // Добавляем валидатор количества хэштегов
 pristine.addValidator(
@@ -71,11 +74,11 @@ pristine.addValidator(
 
 /**
  * Проверяет уникальность хэштегов (регистронезависимо)
- * @param {string} textHashtag - Строка с хэштегами
- * @returns {boolean} true если все хэштеги уникальны
+ * @param {string} textHashtag - Строка с хэштегами из input
+ * @returns {boolean} true если все хэштеги уникальны, иначе false
  */
 const isUniqueHashtag = (textHashtag) => {
-  const lowerCase = normalize(textHashtag).map((tag) => tag.toLowerCase());
+  const lowerCase = normalizeString(textHashtag).map((tag) => tag.toLowerCase());
   return lowerCase.length === new Set(lowerCase).size;
 };
 
@@ -88,8 +91,8 @@ pristine.addValidator(
 
 /**
  * Проверяет длину описания
- * @param {string} textDescription - Текст описания
- * @returns {boolean} true если длина описания не превышает лимит
+ * @param {string} textDescription - Текст описания из textarea
+ * @returns {boolean} true если длина описания не превышает лимит, иначе false
  */
 const checkDescriptionLength = (textDescription) => textDescription.length <= MAX_DESCRIPTION_LENGTH;
 
@@ -101,8 +104,8 @@ pristine.addValidator(
 );
 
 /**
- * Отключает обработку клавиши Esc при фокусе на элементе
- * @param {HTMLElement} element - DOM-элемент, для которого отключается Esc
+ * Отключает обработку клавиши Esc при фокусе на элементе (чтобы не закрыть форму при редактировании)
+ * @param {HTMLElement} element - DOM-элемент, для которого отключается обработка Esc
  */
 const cancelEsc = (item) => {
   item.addEventListener('focus', () => {
@@ -114,6 +117,24 @@ const cancelEsc = (item) => {
 };
 cancelEsc(formHashtag);
 cancelEsc(formDescription);
+
+
+/**
+ * Обработчик события отправки формы.
+ * Проверяет валидность формы, нормализует хэштеги (удаляет лишние пробелы) и отправляет форму, если проверка пройдена.
+ * @param {Event} evt - Объект события отправки формы
+ */
+const onFormSubmit = (evt) => {
+  evt.preventDefault();
+  if (pristine.validate()){
+    // Нормализуем значение поля хэштегов перед отправкой
+    formHashtag.value = formHashtag.value.trim().replaceAll(/\s+/g, ' ');
+    imageUploadForm.submit();
+  }
+};
+
+// Подписываемся на событие отправки формы
+imageUploadForm.addEventListener('submit', onFormSubmit);
 
 /**
  * Экспортируемые элементы формы и валидатор
