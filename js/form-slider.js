@@ -1,26 +1,36 @@
 /**
- *Задача
-
-* ? В этом задании мы продолжим реализацию сценария загрузки изображения и его редактирования на примере заглушки.
-
- * *  Напишите код, который позволит пользователю редактировать масштаб изображения. Кроме визуального применения эффекта необходимо записывать значение в поле формы с масштабом, доступное только для чтения, для дальнейшей отправки на сервер.
-
-  * *  С помощью библиотеки noUiSlider (скрипт и стили находятся в директории /vendor/nouislider) реализуйте применение эффекта для изображения. Кроме визуального применения эффекта необходимо записывать значение в скрытое поле для дальнейшей отправки на сервер.
-
-  * *  Обратите внимание, что при переключении фильтра, уровень эффекта должен сразу сбрасываться до начального состояния, т. е. логика по определению уровня насыщенности должна срабатывать не только при «перемещении» слайдера, но и при переключении фильтров.
- */
-
-/**
- * Работаем с DOM
+ * Контейнер слайдера уровня эффекта
+ * @type {HTMLElement}
  */
 const sliderContainer = document.querySelector('.img-upload__effect-level');
+
+/**
+ * Элемент слайдера для управления интенсивностью эффекта
+ * @type {HTMLElement}
+ */
 const sliderElement = document.querySelector('.effect-level__slider');
+
+/**
+ * Элемент для отображения значения уровня эффекта
+ * @type {HTMLElement}
+ */
 const effectLevelValue = document.querySelector('.effect-level__value');
+
+/**
+ * Контейнер предпросмотра изображения
+ * @type {HTMLElement}
+ */
 const imagePreview = document.querySelector('.img-upload__preview');
+
+/**
+ * Элемент изображения для применения фильтров
+ * @type {HTMLImageElement}
+ */
 const preview = imagePreview.querySelector('img');
 
 /**
- * Вызов слайдера
+ * Инициализация слайдера noUiSlider с базовыми настройками
+ * @type {noUiSlider}
  */
 noUiSlider.create(sliderElement, {
   range: {
@@ -32,10 +42,13 @@ noUiSlider.create(sliderElement, {
   connect: 'lower',
 });
 
-
 /**
- * Изменяем параметры слайдера
- * @param {*} opts
+ * Обновляет параметры слайдера
+ * @param {Object} opts - Объект с параметрами слайдера
+ * @param {number} opts.min - Минимальное значение слайдера
+ * @param {number} opts.max - Максимальное значение слайдера
+ * @param {number} opts.step - Шаг изменения значения
+ * @param {number} opts.start - Начальное значение слайдера
  */
 const changeSlider = (opts) => {
   const {min, max, step, start} = opts;
@@ -50,7 +63,7 @@ const changeSlider = (opts) => {
 };
 
 /**
- * Для эффекта «Оригинал» CSS-стили filter удаляются, слайдер и его контейнер (элемент .img-upload__effect-level) скрываются.
+ * Применяет эффект "Оригинал" - удаляет фильтры и скрывает слайдер
  */
 const changeOriginalEffect = () => {
   preview.style.filter = '';
@@ -58,7 +71,13 @@ const changeOriginalEffect = () => {
 };
 
 /**
- * Объект с фильтрами
+ * Объект с параметрами всех доступных эффектов
+ * @type {Object}
+ * @property {Object} PARAMETRS_EFFECTS - Параметры эффектов
+ * @property {Object} PARAMETRS_EFFECTS.'effect-chrome' - Параметры эффекта "Хром"
+ * @property {Object} PARAMETRS_EFFECTS.'effect-chrome'.opts - Настройки слайдера
+ * @property {string} PARAMETRS_EFFECTS.'effect-chrome'.effectName - CSS-свойство фильтра
+ * @property {string} PARAMETRS_EFFECTS.'effect-chrome'.unitMeasurement - Единица измерения
  */
 const PARAMETRS_EFFECTS = {
   'effect-chrome': {
@@ -114,9 +133,9 @@ const PARAMETRS_EFFECTS = {
 };
 
 /**
- * Изменяем интенсивность применяемого фильтра в зависимости от передвижения слайдера
- * @param {*} effectName
- * @param {*} unitMeasurement
+ * Обрабатывает изменение значения слайдера и применяет эффект к изображению
+ * @param {string} effectName - Название CSS-фильтра
+ * @param {string} unitMeasurement - Единица измерения для значения фильтра
  */
 const changeValueEffect = (effectName, unitMeasurement) => {
   sliderElement.noUiSlider.off();
@@ -127,9 +146,9 @@ const changeValueEffect = (effectName, unitMeasurement) => {
 };
 
 /**
- * Определяем какой элемент выбрали и применяем необходимый тип фильтра + значение
- * @param {*} evt
- * @returns
+ * Обработчик изменения выбранного эффекта в списке
+ * @param {Event} evt - Событие изменения элемента списка эффектов
+ * @returns {void}
  */
 const onEffectListChange = (evt) => {
   const effect = evt.target.id;

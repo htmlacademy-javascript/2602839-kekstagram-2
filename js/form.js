@@ -9,12 +9,26 @@ import {changeOriginalEffect, onEffectListChange} from './form-slider.js';
  */
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
-// КОНСТАНТЫ работы с размером
-const SCALE_STEP = 25; // шаг размера %
-const SCALE_MIN = 25; // размер минимальный % от начального
-const SCALE_MAX = 100; // максимовальный размер в %
+/**
+ * Шаг изменения масштаба изображения в процентах
+ * @type {number}
+ * @constant
+ */
+const SCALE_STEP = 25;
 
-// Находим форму и необходимые элементы DOM
+/**
+ * Минимальный допустимый масштаб изображения в процентах
+ * @type {number}
+ * @constant
+ */
+const SCALE_MIN = 25;
+
+/**
+ * Максимальный допустимый масштаб изображения в процентах
+ * @type {number}
+ * @constant
+ */
+const SCALE_MAX = 100;
 
 /**
  * Модальное окно редактирования изображения
@@ -47,30 +61,54 @@ const scaleImage = document.querySelector('.img-upload__preview');
 const preview = scaleImage.querySelector('img');
 
 /**
- *  Список эффектов
- *
+ * Список элементов выбора эффектов для изображения
+ * @type {HTMLElement}
  */
-const effecstList = document.querySelector('.effects__list');
+const effectsList = document.querySelector('.effects__list');
 
 /**
- *  Маленькое превью
+ * Коллекция элементов предпросмотра эффектов (маленькие превью)
+ * @type {NodeList}
  */
 const smallPreviews = document.querySelectorAll('.effects__preview');
 
 
 /**
- * Масштаб изображения
+ * Кнопка уменьшения масштаба изображения
+ * @type {HTMLElement}
  */
 const scaleSmaller = document.querySelector('.scale__control--smaller');
+
+/**
+ * Кнопка увеличения масштаба изображения
+ * @type {HTMLElement}
+ */
 const scaleBigger = document.querySelector('.scale__control--bigger');
+
+/**
+ * Поле значения масштаба изображения
+ * @type {HTMLInputElement}
+ */
 const scaleValue = document.querySelector('.scale__control--value');
 
-let scaleNumber; // объявляем переменную для размера
+/**
+ * Текущее числовое значение масштаба изображения
+ * @type {number}
+ */
+let scaleNumber;
 
-// Получаем число из строки для работы с размером
+/**
+ * Извлекает числовое значение масштаба из строкового значения поля ввода
+ * @param {HTMLInputElement} scaleString - Поле ввода значения масштаба
+ * @returns {number} Числовое значение масштаба
+ */
 const getScaleNumber = (scaleString) => parseInt(scaleString.value, 10);
 
-// Уменьшение изображения
+/**
+ * Обработчик клика по кнопке уменьшения масштаба
+ * Уменьшает масштаб изображения на значение SCALE_STEP, если не достигнут минимум
+ * @returns {void}
+ */
 const onMinButtonClick = () => {
   scaleNumber = getScaleNumber(scaleValue);
   if(scaleNumber > SCALE_MIN) {
@@ -79,7 +117,11 @@ const onMinButtonClick = () => {
   }
 };
 
-// Увеличение изображения
+/**
+ * Обработчик клика по кнопке увеличения масштаба
+ * Увеличивает масштаб изображения на значение SCALE_STEP, если не достигнут максимум
+ * @returns {void}
+ */
 const onMaxButtonClick = () => {
   scaleNumber = getScaleNumber(scaleValue);
   if(scaleNumber < SCALE_MAX) {
@@ -100,7 +142,7 @@ const openModal = () => {
   document.body.classList.add('modal-open');
   window.addEventListener('keydown', onDocumentKeydown);
   changeOriginalEffect();
-  effecstList.addEventListener('change', onEffectListChange);
+  effectsList.addEventListener('change', onEffectListChange);
   scaleSmaller.addEventListener('click', onMinButtonClick);
   scaleBigger.addEventListener('click', onMaxButtonClick);
 };
@@ -116,14 +158,15 @@ const closeModal = () => {
   document.body.classList.remove('modal-open');
   window.removeEventListener('keydown', onDocumentKeydown);
   pristine.reset();
-  effecstList.removeEventListener('change', onEffectListChange);
-  scaleSmaller.addEventListener('click', onMinButtonClick);
-  scaleBigger.addEventListener('click', onMaxButtonClick);
+  effectsList.removeEventListener('change', onEffectListChange);
+  scaleSmaller.removeEventListener('click', onMinButtonClick);
+  scaleBigger.removeEventListener('click', onMaxButtonClick);
 };
 
 /**
- * Обработчик нажатия клавиши Esc для закрытия модального окна
- * @param {KeyboardEvent} evt - Событие клавиатуры
+ * Обработчик события нажатия клавиши на документе
+ * Закрывает модальное окно при нажатии клавиши Escape
+ * @param {KeyboardEvent} evt - Объект события клавиатуры
  * @returns {void}
  */
 function onDocumentKeydown(evt) {
@@ -142,9 +185,9 @@ cancelButton.addEventListener('click', () => {
 });
 
 /**
- * Обработчик клика по overlay (вне области модального окна)
- * Закрывает модальное окно при клике на затемненную область вокруг него
- * @param {MouseEvent} evt - Событие клика мыши
+ * Обработчик клика по overlay (фоновой области модального окна)
+ * Закрывает модальное окно при клике вне области контента
+ * @param {MouseEvent} evt - Объект события мыши
  * @returns {void}
  */
 overlay.addEventListener('click', (evt) => {
@@ -153,23 +196,13 @@ overlay.addEventListener('click', (evt) => {
   }
 });
 
-
 /**
- * Обработчик изменения значения в поле выбора файла
- * Открывает модальное окно при выборе файла
+ * Обработчик изменения поля выбора файла (загрузка и отображение изображения)
+ * Проверяет тип файла и отображает preview если тип поддерживается
  * @returns {void}
- */
+*/
 fileInput.addEventListener('change', () => {
   openModal();
-});
-
-
-/**
- * Обработчик изменения значения в поле выбора файла
- * Загружает и отображает выбранное изображение если тип файла поддерживается
- * @returns {void}
- */
-fileInput.addEventListener('change', () => {
   const file = fileInput.files[0];
   const fileName = file.name.toLowerCase();
   const matches = FILE_TYPES.some((type) => fileName.endsWith(type));
