@@ -1,4 +1,6 @@
 import { EscKey } from './utils.js';
+import {pristine} from './form-validator.js';
+import {changeOriginalEffect, onEffectListChange} from './form-slider.js';
 
 /**
  * Допустимые типы файлов для загрузки
@@ -39,6 +41,12 @@ const scaleImage = document.querySelector('.img-upload__preview');
  */
 const preview = scaleImage.querySelector('img');
 
+/**
+ *  Список эффектов
+ *
+ */
+const effecstList = document.querySelector('.effects__list');
+
 
 /**
  * Открывает модальное окно редактирования изображения
@@ -50,6 +58,8 @@ const openModal = () => {
   overlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
+  changeOriginalEffect();
+  effecstList.addEventListener('change', onEffectListChange);
 };
 
 /**
@@ -62,6 +72,8 @@ const closeModal = () => {
   overlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   window.removeEventListener('keydown', onDocumentKeydown);
+  pristine.reset();
+  effecstList.removeEventListener('change', onEffectListChange);
 };
 
 /**
