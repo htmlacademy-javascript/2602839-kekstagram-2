@@ -36,7 +36,7 @@ const pristine = new Pristine(imageUploadForm, {
  * @param {string} value - Строка хэштегов
  * @returns {string[]} Массив нормализованных хэштегов
  */
-const normalize = (value) => {
+const normalizeString = (value) => {
   const noNormalizeArray = value.trim().split(' ');
   return noNormalizeArray.filter((tag) => tag.length > 0);
 };
@@ -46,7 +46,7 @@ const normalize = (value) => {
  * @param {string} textHashtag - Строка с хэштегами
  * @returns {boolean} true если все хэштеги соответствуют формату
  */
-const isValidateTextHashtag = (textHashtag) => normalize(textHashtag).every((tag) => VALID_SYMBOLS.test(tag));
+const isValidateTextHashtag = (textHashtag) => normalizeString(textHashtag).every((tag) => VALID_SYMBOLS.test(tag));
 
 // Добавляем валидатор формата хэштегов
 pristine.addValidator(
@@ -60,7 +60,7 @@ pristine.addValidator(
  * @param {string} textHashtag - Строка с хэштегами
  * @returns {boolean} true если количество хэштегов не превышает лимит
  */
-const isValidCountHashtag = (textHashtag) => normalize(textHashtag).length <= MAX_HASHTAG_COUNT;
+const isValidCountHashtag = (textHashtag) => normalizeString(textHashtag).length <= MAX_HASHTAG_COUNT;
 
 // Добавляем валидатор количества хэштегов
 pristine.addValidator(
@@ -75,7 +75,7 @@ pristine.addValidator(
  * @returns {boolean} true если все хэштеги уникальны
  */
 const isUniqueHashtag = (textHashtag) => {
-  const lowerCase = normalize(textHashtag).map((tag) => tag.toLowerCase());
+  const lowerCase = normalizeString(textHashtag).map((tag) => tag.toLowerCase());
   return lowerCase.length === new Set(lowerCase).size;
 };
 
@@ -114,6 +114,22 @@ const cancelEsc = (item) => {
 };
 cancelEsc(formHashtag);
 cancelEsc(formDescription);
+
+
+/**
+ * Проверка на выполнение проверки формы иначе не отправит
+ * При этом удаляем лишние пробелы. Ну по идее должно.
+ * @param {*} evt
+ */
+const onFormSubmit = (evt) => {
+  evt.preventDefault();
+  if (pristine.validate()){
+    formHashtag.value = formHashtag.value.trim().replaceAll(/\s+/g, ' ');
+    imageUploadForm.submit();
+  }
+};
+
+imageUploadForm.addEventListener('submit', onFormSubmit);
 
 /**
  * Экспортируемые элементы формы и валидатор
