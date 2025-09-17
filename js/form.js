@@ -211,6 +211,8 @@ fileInput.addEventListener('change', () => {
     smallPreviews.forEach((smallPreview) => {
       smallPreview.style.backgroundImage = `  url('${preview.src}')`;
     });
+  } else {
+    closeModal();
   }
 });
 
