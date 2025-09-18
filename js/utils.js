@@ -12,23 +12,11 @@ const getRandomInteger = (a, b) => {
   return Math.floor(result);
 };
 
-// console.log(getRandomInteger(1,6));
-// console.log(getRandomInteger(15,200));
-// console.log(getRandomInteger(0,30));
-// console.log(getRandomInteger());
-
-
 /**Функция для генерации случайного элемента массива
  * @param {Array} element - сам входной массив
  * @return {*} result - элемент массива element
  */
 const getRandomElements = (elements) => elements[getRandomInteger(0, elements.length - 1)];
-
-
-/*
-Задача
-Напишите код для закрытия окна по нажатию клавиши Esc и клике по иконке закрытия.
-*/
 
 /**Фуннкция обнаружения нажатия клавиши "Esc"
  * @param {key} evt - нажата клавиша

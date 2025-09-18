@@ -73,9 +73,6 @@ const onFilterChange = (photos, filterType) => {
 
 // Функция для инициализации фильтров
 const initFilters = (photos) => {
-  // // Показываем блок фильтров после загрузки данных
-  // showFilters();
-
   // Добавляем обработчики на кнопки фильтров
   filterButtons.forEach((button) => {
     button.addEventListener('click', () => {

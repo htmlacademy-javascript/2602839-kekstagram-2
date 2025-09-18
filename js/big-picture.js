@@ -20,8 +20,7 @@ let comments = []; // переменная для комментариев в э
 let commentsShown = 0; // счётчик комментов для модалки
 
 
-/**
- * Создает DOM-элемент комментария на основе данных
+/**Создает DOM-элемент комментария на основе данных
  * @param {Object} commentData - Данные комментария
  * @param {string} commentData.avatar - URL аватара пользователя
  * @param {string} commentData.name - Имя пользователя
@@ -53,8 +52,7 @@ const createComment = ({ avatar, name, message }) => {
 };
 
 
-/**
- * Рендерит порцию комментариев с учетом текущего состояния
+/**Рендерит порцию комментариев с учетом текущего состояния
  * Управляет видимостью кнопки "Загрузить ещё" и счетчиками
 */
 const renderComments = () => {
@@ -86,8 +84,7 @@ const renderComments = () => {
 
 };
 
-/**
- * Рендерит информацию о фотографии в модальном окне
+/**Рендерит информацию о фотографии в модальном окне
  * @param {Object} photoData - Данные фотографии
  * @param {string} photoData.url - URL изображения
  * @param {number} photoData.likes - Количество лайков
@@ -116,8 +113,7 @@ const updateCommentsCounter = () => {
     `${socialCommentShownCount.textContent} из ${socialCommentTotalCount.textContent} комментариев`;
 };
 
-/**
- * Обработчик клика по кнопке "Загрузить ещё"
+/**Обработчик клика по кнопке "Загрузить ещё"
  * Загружает следующую порцию комментариев и обновляет счетчик
  */
 const onCommentsLoadClick = () => {
@@ -126,8 +122,7 @@ const onCommentsLoadClick = () => {
 };
 
 
-/**
- * Закрывает модальное окно с полноразмерным изображением
+/**Закрывает модальное окно с полноразмерным изображением
  * Восстанавливает скролл страницы и удаляет обработчики событий
  */
 
@@ -142,8 +137,7 @@ const closeBigPic = () => {
 };
 
 
-/**
- * Обработчик нажатия клавиши Esc для закрытия модального окна
+/**Обработчик нажатия клавиши Esc для закрытия модального окна
  * @param {Event} evt - Событие клавиатуры
  */
 function onDocumentKeydown(evt) {
@@ -154,15 +148,13 @@ function onDocumentKeydown(evt) {
 }
 
 
-/**
- * Обработчик клика по кнопке закрытия модального окна
+/**Обработчик клика по кнопке закрытия модального окна
  */
 function onCloseButtonClick() {
   closeBigPic();
 }
 
-/**
- * Открывает модальное окно с полноразмерным изображением и комментариями
+/**Открывает модальное окно с полноразмерным изображением и комментариями
  * @param {Object} data - Данные для отображения
  * @param {Array} data.comments - Массив комментариев
  */
@@ -183,11 +175,5 @@ const openBigPic = (data) => {
   updateCommentsCounter(); // формирование вывода по кол-ву комментов
   commentsLoader.addEventListener('click', onCommentsLoadClick);
 };
-
-
-// Обработчик кнопки загрузки комментариев
-// commentsLoader.addEventListener('click', () => {
-//   onCommentsLoadClick(comments);
-// });
 
 export { openBigPic, closeBigPic };

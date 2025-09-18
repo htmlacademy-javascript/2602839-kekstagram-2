@@ -19,8 +19,7 @@ const container = document.querySelector('.pictures');
 
 
 // 3.Как и чем заполнить данными для фотографии
-/**
- * Функция для создания DOM-элемента миниатюры фотографии
+/**Функция для создания DOM-элемента миниатюры фотографии
  * @param {object} photo - объект с данными фотографии
  * @param {number} photo.id - идентификатор фотографии
  * @param {string} photo.url - URL изображения
@@ -58,8 +57,7 @@ const createThumbnail = ({id, url, description, likes, comments}) => {
   return pictureElement;
 };
 
-/**
- *Рендерит миниатюры фотографий в указанный контейнер
+/**Рендерит миниатюры фотографий в указанный контейнер
  *
  * @function
  * @param {Object[]} pictures - Массив объектов с данными фотографий
