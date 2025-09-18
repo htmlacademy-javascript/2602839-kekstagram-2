@@ -1,6 +1,6 @@
 // Получение данных
 import { showAlert } from './utils';
-import { initFilters } from './filer-sorting';
+import { initFilters } from './filter-sorting';
 
 const URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
 

@@ -31,6 +31,7 @@ const closeBigPic = () => {
   document.removeEventListener('keydown', onDocumentKeydown); // убираем отслеживание нажатия кнопки
   closeButton.removeEventListener('click', onCloseButtonClick); // убираем отслеживание клика на крестик закрытия
   commentsShown = 0; // обнуляем счётчик показываемый комментов для следующей фото
+  commentsLoader.removeEventListener('click'); // убираем отслеживание клика по кнопке загрузить ещё при закрытии модалки
 };
 
 /**

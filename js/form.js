@@ -161,6 +161,7 @@ const closeModal = () => {
   effectsList.removeEventListener('change', onEffectListChange);
   scaleSmaller.removeEventListener('click', onMinButtonClick);
   scaleBigger.removeEventListener('click', onMaxButtonClick);
+  fileInput.value = '';
 };
 
 /**
