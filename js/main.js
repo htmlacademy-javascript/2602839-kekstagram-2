@@ -23,5 +23,5 @@ getData()
       dataErrorElement.remove();
     }, 5000);
     //console.error('Ошибка загрузки данных:', error);
-    showAlert(`Ошибка загрузки данных: ${ error}`);
+    showAlert(`Ошибка загрузки данных: ${error}`);
   });
