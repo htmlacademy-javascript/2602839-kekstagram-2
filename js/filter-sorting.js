@@ -20,11 +20,6 @@ const container = document.querySelector('.pictures');
 // Переменная для хранения текущего фильтра
 let currentFilter = Filter.DEFAULT;
 
-// Функция для показа блока фильтров
-const showFilters = () => {
-  filtersContainer.classList.remove('img-filters--inactive');
-};
-
 // Функция для скрытия всех фотографий
 const clearThumbnails = () => {
   const pictures = container.querySelectorAll('.picture');
@@ -78,8 +73,8 @@ const onFilterChange = (photos, filterType) => {
 
 // Функция для инициализации фильтров
 const initFilters = (photos) => {
-  // Показываем блок фильтров после загрузки данных
-  showFilters();
+  // // Показываем блок фильтров после загрузки данных
+  // showFilters();
 
   // Добавляем обработчики на кнопки фильтров
   filterButtons.forEach((button) => {
@@ -91,5 +86,10 @@ const initFilters = (photos) => {
   });
 };
 
+// Функция для показа блока фильтров
+const showFilters = () => {
+  filtersContainer.classList.remove('img-filters--inactive');
+};
 
-export { initFilters};
+
+export { initFilters, showFilters};

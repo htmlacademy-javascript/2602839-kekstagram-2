@@ -1,6 +1,4 @@
-// Получение данных
-import { showAlert } from './utils';
-import { initFilters } from './filter-sorting';
+import { showAlert } from './utils.js';
 
 const URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
 
@@ -36,9 +34,6 @@ const getData = () => load(Route.GET, ErrorText.GET);
 
 const sendData = (body) => load(Route.POST, ErrorText.POST, Method.POST, body);
 
-const data = await getData();
-// Инициализируем фильтры после загрузки данных
-initFilters(data);
-
-export {getData, sendData, data};
-
+// Удаляем автоматическую инициализацию фильтров
+// Фильтры будут инициализироваться после успешной загрузки данных
+export { getData, sendData };
