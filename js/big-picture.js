@@ -11,7 +11,7 @@ const commentItem = commentsList.querySelector('.social__comment');
 
 const socialCommentShownCount = fullSizePhoto.querySelector('.social__comment-shown-count');
 const socialCommentTotalCount = fullSizePhoto.querySelector('.social__comment-total-count');
-const socialCommentCount = fullSizePhoto.querySelector('.social__comment-count');
+// const socialCommentCount = fullSizePhoto.querySelector('.social__comment-count');
 const commentsLoader = fullSizePhoto.querySelector('.comments-loader');
 
 // Состояние приложения
