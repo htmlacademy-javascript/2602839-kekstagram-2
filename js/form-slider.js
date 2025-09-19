@@ -52,13 +52,22 @@ noUiSlider.create(sliderElement, {
  */
 const changeSlider = (opts) => {
   const {min, max, step, start} = opts;
-  sliderElement.noUiSlider.updateOptions ({
+  sliderElement.noUiSlider.updateOptions({
     range: {
       min: min,
       max: max,
     },
     step: step,
     start: start,
+    format: {
+      to: function (value) {
+        // Форматируем значение с одним знаком после запятой
+        return value.toFixed(1);
+      },
+      from: function (value) {
+        return parseFloat(value);
+      }
+    }
   });
 };
 
@@ -68,6 +77,7 @@ const changeSlider = (opts) => {
 const changeOriginalEffect = () => {
   preview.style.filter = '';
   sliderContainer.classList.add('hidden');
+  effectLevelValue.value = ''; // Сбрасываем значение
 };
 
 /**
@@ -132,16 +142,50 @@ const PARAMETRS_EFFECTS = {
   }
 };
 
+
+/**
+ * Форматирует значение слайдера в нужный формат
+ * @param {number} value - Числовое значение
+ * @param {number} step - Шаг слайдера
+ * @returns {string} Отформатированное значение
+ */
+const formatSliderValue = (value, step) => {
+  // Если шаг целочисленный (1), возвращаем целое число
+  if (step === 1) {
+    return Math.round(value).toString();
+  }
+
+  // Для дробных шагов округляем до одного знака после запятой
+  const roundedValue = Math.round(value * 10) / 10;
+
+  // Преобразуем в строку и убираем лишний ".0" в конце
+  let formattedValue = roundedValue.toFixed(1);
+
+  // Если значение целое (например, 1.0), убираем .0
+  if (formattedValue.endsWith('.0')) {
+    formattedValue = formattedValue.slice(0, -2);
+  }
+
+  return formattedValue;
+};
+
 /**
  * Обрабатывает изменение значения слайдера и применяет эффект к изображению
  * @param {string} effectName - Название CSS-фильтра
  * @param {string} unitMeasurement - Единица измерения для значения фильтра
+ * @param {number} step - Шаг слайдера
  */
-const changeValueEffect = (effectName, unitMeasurement) => {
+const changeValueEffect = (effectName, unitMeasurement, step) => {
   sliderElement.noUiSlider.off();
   sliderElement.noUiSlider.on('update', () => {
-    effectLevelValue.value = sliderElement.noUiSlider.get();
-    preview.style.filter = `${effectName}(${effectLevelValue.value}${unitMeasurement})`;
+    const rawValue = sliderElement.noUiSlider.get();
+    const numericValue = parseFloat(rawValue);
+
+    // Форматируем значение согласно требованиям
+    effectLevelValue.value = formatSliderValue(numericValue, step);
+
+    // Для применения фильтра используем числовое значение
+    preview.style.filter = `${effectName}(${numericValue}${unitMeasurement})`;
   });
 };
 
@@ -161,7 +205,7 @@ const onEffectListChange = (evt) => {
   const effectName = PARAMETRS_EFFECTS[effect].effectName;
   const unitMeasurement = PARAMETRS_EFFECTS[effect].unitMeasurement;
   changeSlider(opts);
-  changeValueEffect(effectName, unitMeasurement);
+  changeValueEffect(effectName, unitMeasurement, opts.step); // Передаем step
 };
 
 export {changeOriginalEffect, onEffectListChange};

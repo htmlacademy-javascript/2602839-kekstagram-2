@@ -118,26 +118,46 @@ const cancelEsc = (item) => {
 cancelEsc(formHashtag);
 cancelEsc(formDescription);
 
-
 /**
- * Обработчик события отправки формы.
- * Проверяет валидность формы, нормализует хэштеги (удаляет лишние пробелы) и отправляет форму, если проверка пройдена.
- * @param {Event} evt - Объект события отправки формы
+ * Нормализует хэштеги перед отправкой
+ * @returns {void}
  */
-const onFormSubmit = (evt) => {
-  evt.preventDefault();
-  if (pristine.validate()){
-    // Нормализуем значение поля хэштегов перед отправкой
-    formHashtag.value = formHashtag.value.trim().replaceAll(/\s+/g, ' ');
-    imageUploadForm.submit();
-  }
+const normalizeHashtags = () => {
+  formHashtag.value = formHashtag.value.trim().replaceAll(/\s+/g, ' ');
 };
 
-// Подписываемся на событие отправки формы
-imageUploadForm.addEventListener('submit', onFormSubmit);
+/**
+ * Проверяет валидность формы
+ * @returns {boolean} true если форма валидна, иначе false
+ */
+const validateForm = () => pristine.validate();
+
+/**
+ * Получает данные формы
+ * @returns {FormData} Данные формы
+ */
+const getFormData = () => {
+  normalizeHashtags();
+  return new FormData(imageUploadForm);
+};
+
+/**
+ * Сбрасывает валидацию формы
+ * @returns {void}
+ */
+const resetValidation = () => {
+  pristine.reset();
+};
 
 /**
  * Экспортируемые элементы формы и валидатор
  * @namespace
  */
-export {imageUploadForm, pristine};
+export {
+  imageUploadForm,
+  pristine,
+  validateForm,
+  getFormData,
+  resetValidation,
+  normalizeHashtags
+};
