@@ -20,6 +20,11 @@ const container = document.querySelector('.pictures');
 // Переменная для хранения текущего фильтра
 let currentFilter = Filter.DEFAULT;
 
+// Функция для показа блока фильтров
+const showFilters = () => {
+  filtersContainer.classList.remove('img-filters--inactive');
+};
+
 // Функция для скрытия всех фотографий
 const clearThumbnails = () => {
   const pictures = container.querySelectorAll('.picture');
@@ -50,6 +55,14 @@ const applyFilter = (photos, filterType) => {
   }
 };
 
+// Функция для обновления активного класса кнопок
+const updateActiveButton = (activeFilterId) => {
+  filterButtons.forEach((button) => {
+    const isActive = button.id === activeFilterId;
+    button.classList.toggle('img-filters__button--active', isActive);
+  });
+};
+
 // Функция для рендеринга отфильтрованных фотографий
 const renderFilteredPhotos = debounce((photos, filterType) => {
   clearThumbnails();
@@ -60,9 +73,7 @@ const renderFilteredPhotos = debounce((photos, filterType) => {
 // Функция для обработки изменения фильтра
 const onFilterChange = (photos, filterType) => {
   // Обновляем активную кнопку
-  filterButtons.forEach((button) => {
-    button.classList.toggle('img-filters__button--active', button.id === filterType);
-  });
+  updateActiveButton(filterType);
 
   // Сохраняем текущий фильтр
   currentFilter = filterType;
@@ -73,6 +84,12 @@ const onFilterChange = (photos, filterType) => {
 
 // Функция для инициализации фильтров
 const initFilters = (photos) => {
+  // Показываем блок фильтров после загрузки данных
+  showFilters();
+
+  // Устанавливаем активный класс для кнопки по умолчанию
+  updateActiveButton(Filter.DEFAULT);
+
   // Добавляем обработчики на кнопки фильтров
   filterButtons.forEach((button) => {
     button.addEventListener('click', () => {
@@ -83,10 +100,4 @@ const initFilters = (photos) => {
   });
 };
 
-// Функция для показа блока фильтров
-const showFilters = () => {
-  filtersContainer.classList.remove('img-filters--inactive');
-};
-
-
-export { initFilters, showFilters};
+export { initFilters, showFilters };
