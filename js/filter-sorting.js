@@ -9,6 +9,7 @@ const Filter = {
 };
 
 const RANDOM_PHOTOS_COUNT = 10;
+const FILTER_DEBOUNCE_DELAY = 500; // 500ms задержка
 
 // DOM элементы для фильтров
 const filtersContainer = document.querySelector('.img-filters');
@@ -63,22 +64,22 @@ const updateActiveButton = (activeFilterId) => {
   });
 };
 
-// Функция для рендеринга отфильтрованных фотографий
+// Функция для рендеринга отфильтрованных фотографий с debounce
 const renderFilteredPhotos = debounce((photos, filterType) => {
   clearThumbnails();
   const filteredPhotos = applyFilter(photos, filterType);
   renderThumbnails(filteredPhotos);
-}, 500);
+}, FILTER_DEBOUNCE_DELAY); // Используем debounce с задержкой 500ms
 
 // Функция для обработки изменения фильтра
 const onFilterChange = (photos, filterType) => {
-  // Обновляем активную кнопку
+  // Немедленно обновляем активную кнопку (визуальный фидбэк)
   updateActiveButton(filterType);
 
   // Сохраняем текущий фильтр
   currentFilter = filterType;
 
-  // Рендерим отфильтрованные фото
+  // Рендерим отфильтрованные фото с задержкой
   renderFilteredPhotos(photos, filterType);
 };
 
