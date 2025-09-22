@@ -1,12 +1,10 @@
-// Получение данных
-import { showAlert } from './utils';
-import { initFilters } from './filer-sorting';
+import { showAlert } from './utils.js';
 
 const URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
 
 const Route = {
   GET: '/data',
-  POST: '',
+  POST: '/',
 };
 
 const Method = {
@@ -21,14 +19,19 @@ const ErrorText = {
 
 const load = async (route, errorText, method = Method.GET, body = null) => {
   try {
-    const response = await fetch(`${URL}${route}`, {method, body});
+    const response = await fetch(`${URL}${route}`, {
+      method,
+      body,
+    });
+
     if (!response.ok) {
-      throw new Error();
+      throw new Error(`${errorText}. Status: ${response.status}`);
     }
-    return response.json();
-  } catch {
-    showAlert(errorText);
-    throw new Error(errorText);
+
+    return await response.json();
+  } catch (error) {
+    showAlert(`${errorText}. ${error.message}`);
+    throw error;
   }
 };
 
@@ -36,9 +39,4 @@ const getData = () => load(Route.GET, ErrorText.GET);
 
 const sendData = (body) => load(Route.POST, ErrorText.POST, Method.POST, body);
 
-const data = await getData();
-// Инициализируем фильтры после загрузки данных
-initFilters(data);
-
-export {getData, sendData, data};
-
+export { getData, sendData };

@@ -9,6 +9,7 @@ const Filter = {
 };
 
 const RANDOM_PHOTOS_COUNT = 10;
+const FILTER_DEBOUNCE_DELAY = 600; // 600ms задержка
 
 // DOM элементы для фильтров
 const filtersContainer = document.querySelector('.img-filters');
@@ -55,24 +56,30 @@ const applyFilter = (photos, filterType) => {
   }
 };
 
-// Функция для рендеринга отфильтрованных фотографий
+// Функция для обновления активного класса кнопок
+const updateActiveButton = (activeFilterId) => {
+  filterButtons.forEach((button) => {
+    const isActive = button.id === activeFilterId;
+    button.classList.toggle('img-filters__button--active', isActive);
+  });
+};
+
+// Функция для рендеринга отфильтрованных фотографий с debounce
 const renderFilteredPhotos = debounce((photos, filterType) => {
   clearThumbnails();
   const filteredPhotos = applyFilter(photos, filterType);
   renderThumbnails(filteredPhotos);
-}, 500);
+}, FILTER_DEBOUNCE_DELAY); // Используем debounce с задержкой 500ms
 
 // Функция для обработки изменения фильтра
 const onFilterChange = (photos, filterType) => {
-  // Обновляем активную кнопку
-  filterButtons.forEach((button) => {
-    button.classList.toggle('img-filters__button--active', button.id === filterType);
-  });
+  // Немедленно обновляем активную кнопку (визуальный фидбэк)
+  updateActiveButton(filterType);
 
   // Сохраняем текущий фильтр
   currentFilter = filterType;
 
-  // Рендерим отфильтрованные фото
+  // Рендерим отфильтрованные фото с задержкой
   renderFilteredPhotos(photos, filterType);
 };
 
@@ -80,6 +87,9 @@ const onFilterChange = (photos, filterType) => {
 const initFilters = (photos) => {
   // Показываем блок фильтров после загрузки данных
   showFilters();
+
+  // Устанавливаем активный класс для кнопки по умолчанию
+  updateActiveButton(Filter.DEFAULT);
 
   // Добавляем обработчики на кнопки фильтров
   filterButtons.forEach((button) => {
@@ -91,5 +101,4 @@ const initFilters = (photos) => {
   });
 };
 
-
-export { initFilters};
+export { initFilters, showFilters };

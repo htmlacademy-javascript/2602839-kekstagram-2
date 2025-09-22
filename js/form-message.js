@@ -1,97 +1,131 @@
-// Показывает сообщения после отправки формы
 import { EscKey } from './utils.js';
-import { pristine, imageUploadForm } from './form-validator.js';
+import { validateForm, getFormData, resetValidation, showValidationErrors } from './form-validator.js';
 import { sendData } from './api.js';
-import { closeModal, onDocumentKeydown } from './form.js';
+import { closeModal, resetForm } from './form.js';
 
-// КОНСТАНТЫ
 const ButtonClass = {
   ERROR: '.error__button',
   SUCCESS: '.success__button',
 };
 
+const MESSAGE_TIMEOUT = 5000;
 
-const successMessage = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
-const errorMessage = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
+const successTemplate = document.querySelector('#success');
+const errorTemplate = document.querySelector('#error');
 const uploadButton = document.querySelector('.img-upload__submit');
 
+let successTimer = null;
+let errorTimer = null;
 
-// Определяем был ли клик за пределами блока с сообщением
-function onBodyClick (evt) {
+const clearMessageTimers = () => {
+  if (successTimer) {
+    clearTimeout(successTimer);
+    successTimer = null;
+  }
+  if (errorTimer) {
+    clearTimeout(errorTimer);
+    errorTimer = null;
+  }
+};
+
+// ИЗМЕНЕНИЕ: Функция закрытия только сообщения (не формы)
+const closeMessage = () => {
+  const successElement = document.querySelector('.success');
+  const errorElement = document.querySelector('.error');
+
+  if (successElement) {
+    successElement.remove();
+  }
+  if (errorElement) {
+    errorElement.remove();
+  }
+
+  clearMessageTimers();
+  // Убираем только обработчики сообщения
+  document.removeEventListener('keydown', onMessageKeydown);
+  document.removeEventListener('click', onBodyClick);
+};
+
+// ИЗМЕНЕНИЕ: Отдельный обработчик Esc для сообщений
+function onMessageKeydown(evt) {
+  if (EscKey(evt)) {
+    evt.preventDefault();
+    evt.stopPropagation(); // Важно: предотвращаем всплытие
+    closeMessage();
+  }
+}
+
+function onBodyClick(evt) {
   if (evt.target.closest('.error__inner') || evt.target.closest('.success__inner')) {
     return;
   }
-  closeModal();
+  closeMessage();
 }
 
+const showMessage = (template, buttonSelector) => {
+  const messageElement = template.content.cloneNode(true);
+  document.body.append(messageElement);
 
-// Функция закрытия сообщения формы по кнопке ESС
-// А onDocumentKeydown это функция закрытия самой формы по кнопке ESC
-function onDocumentKeydownEsc(evt) {
-  if (EscKey(evt)) {
-    evt.preventDefault();
-    closeModal();
+  const button = document.querySelector(buttonSelector);
+  if (button) {
+    button.addEventListener('click', closeMessage);
   }
-}
 
-
-// Закрытие окна сообщения
-const closeMessage = () => {
-  const messages = document.querySelector('.data-error') || document.querySelector('.success');
-  messages.remove();
-  window.removeEventListener('keydown', onDocumentKeydownEsc);
-  document.removeEventListener('click', onBodyClick);
-  // Если сообщение об ошибке закрыто, то возвращаем обработчик закрытия по ESC на саму форму
-  window.addEventListener('keydown', onDocumentKeydown);
-};
-
-// Показываем сообщение после отправки формы
-const showMessage = (message, buttonMessage) => {
-  // Разметку сообщения, которая находится в блоке #success внутри шаблона template, нужно разместить перед закрывающим тегом </body>
-  document.body.append(message);
-  // Сообщение должно исчезать после нажатия на кнопку .success__button
-  message.querySelector(buttonMessage).addEventListener('click', closeMessage);
-  // Сообщение должно исчезать по нажатию на клавишу Esc
-  document.addEventListener('keydown', onDocumentKeydown);
-  // Сообщение должно исчезать по клику на произвольную область экрана за пределами блока с сообщением
+  // ИЗМЕНЕНИЕ: Используем отдельный обработчик для сообщений
+  document.addEventListener('keydown', onMessageKeydown);
   document.addEventListener('click', onBodyClick);
 };
 
+const showSuccessMessage = () => {
+  showMessage(successTemplate, ButtonClass.SUCCESS);
+  successTimer = setTimeout(closeMessage, MESSAGE_TIMEOUT);
+};
 
-const showSuccessMessage = () => showMessage(successMessage, ButtonClass.SUCCESS);
-const showErrorMessage = () => showMessage(errorMessage, ButtonClass.ERROR);
+const showErrorMessage = () => {
+  showMessage(errorTemplate, ButtonClass.ERROR);
+  errorTimer = setTimeout(closeMessage, MESSAGE_TIMEOUT);
+};
 
-// Блокировка кнопки отправки формы
 const blockUploadButton = () => {
   uploadButton.disabled = true;
   uploadButton.textContent = 'Отправляю...';
 };
 
-// Отмена блокировки кнопки отправки формы
 const unblockUploadButton = () => {
   uploadButton.disabled = false;
   uploadButton.textContent = 'Опубликовать';
 };
 
-// Отправка данных формы на сервер (+ скрытие формы и показ сообщения об успешной отправке)
-const sendDataSuccess = async (data) => {
+// ИЗМЕНЕНИЕ: Обработка успешной отправки
+const sendDataSuccess = async (formData) => {
   try {
-    await sendData(data);
-    closeModal();
+    blockUploadButton();
+    await sendData(formData);
+    closeModal(); // Закрываем форму при успехе
+    resetForm();
+    resetValidation();
     showSuccessMessage();
-  } catch {
+  } catch (error) {
+    // ИЗМЕНЕНИЕ: При ошибке форма НЕ закрывается
     showErrorMessage();
+  } finally {
+    unblockUploadButton();
   }
 };
 
-// Отправка формы или показ ошибки (проверка валидации, показ соответствующего окна, сбор информации с формы в formData)
-imageUploadForm.addEventListener('submit', async (evt) => {
+const onFormSubmit = async (evt) => {
   evt.preventDefault();
-  const isValid = pristine.validate();
+
+  showValidationErrors();
+
+  const isValid = validateForm();
   if (isValid) {
-    blockUploadButton();
-    const formData = new FormData(evt.target);
+    const formData = getFormData();
     await sendDataSuccess(formData);
-    unblockUploadButton();
   }
-});
+};
+
+const imageUploadForm = document.querySelector('.img-upload__form');
+imageUploadForm.addEventListener('submit', onFormSubmit);
+
+export { showSuccessMessage, showErrorMessage, closeMessage, MESSAGE_TIMEOUT };
