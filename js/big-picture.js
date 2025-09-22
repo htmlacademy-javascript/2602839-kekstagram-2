@@ -78,17 +78,17 @@ const onCloseButtonClick = () => {
 };
 
 /** Закрывает модальное окно */
-const closeBigPic = () => {
+function closeBigPic () {
   fullSizePhoto.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
   closeButton.removeEventListener('click', onCloseButtonClick);
   commentsShown = 0;
   commentsLoader.removeEventListener('click', onCommentsLoadClick);
-};
+}
 
 /** Открывает модальное окно */
-const openBigPic = (data) => {
+function openBigPic (data) {
   comments = data.comments;
 
   fullSizePhoto.classList.remove('hidden');
@@ -100,6 +100,6 @@ const openBigPic = (data) => {
   renderPictureInformation(data);
   renderComments();
   commentsLoader.addEventListener('click', onCommentsLoadClick);
-};
+}
 
 export { openBigPic, closeBigPic };

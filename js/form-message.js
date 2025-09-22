@@ -46,7 +46,7 @@ const clearMessageTimers = () => {
 };
 
 /** Закрывает сообщение */
-const closeMessage = () => {
+function closeMessage () {
   const successElement = document.querySelector('.success');
   const errorElement = document.querySelector('.error');
 
@@ -61,7 +61,7 @@ const closeMessage = () => {
   window.removeEventListener('keydown', onDocumentKeydownEsc);
   document.removeEventListener('click', onBodyClick);
   window.addEventListener('keydown', onDocumentKeydown);
-};
+}
 
 /** Показывает сообщение */
 const showMessage = (template, buttonSelector) => {
