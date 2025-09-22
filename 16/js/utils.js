@@ -12,23 +12,11 @@ const getRandomInteger = (a, b) => {
   return Math.floor(result);
 };
 
-// console.log(getRandomInteger(1,6));
-// console.log(getRandomInteger(15,200));
-// console.log(getRandomInteger(0,30));
-// console.log(getRandomInteger());
-
-
 /**Функция для генерации случайного элемента массива
  * @param {Array} element - сам входной массив
  * @return {*} result - элемент массива element
  */
 const getRandomElements = (elements) => elements[getRandomInteger(0, elements.length - 1)];
-
-
-/*
-Задача
-Напишите код для закрытия окна по нажатию клавиши Esc и клике по иконке закрытия.
-*/
 
 /**Фуннкция обнаружения нажатия клавиши "Esc"
  * @param {key} evt - нажата клавиша
@@ -59,7 +47,7 @@ function showAlert (message) {
 // Функция взята из интернета и доработана
 // Источник - https://www.freecodecamp.org/news/javascript-debounce-example
 
-function debounce (callback, timeoutDelay = 500) {
+function debounce (callback, timeoutDelay = 600) {
   // Используем замыкания, чтобы id таймаута у нас навсегда приклеился
   // к возвращаемой функции с setTimeout, тогда мы его сможем перезаписывать
   let timeoutId;
