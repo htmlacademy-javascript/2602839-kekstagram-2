@@ -4,7 +4,7 @@ const URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
 
 const Route = {
   GET: '/data',
-  POST: '/',
+  POST: '',
 };
 
 const Method = {
@@ -19,19 +19,14 @@ const ErrorText = {
 
 const load = async (route, errorText, method = Method.GET, body = null) => {
   try {
-    const response = await fetch(`${URL}${route}`, {
-      method,
-      body,
-    });
-
+    const response = await fetch(`${URL}${route}`, {method, body});
     if (!response.ok) {
-      throw new Error(`${errorText}. Status: ${response.status}`);
+      throw new Error();
     }
-
-    return await response.json();
-  } catch (error) {
-    showAlert(`${errorText}. ${error.message}`);
-    throw error;
+    return response.json();
+  } catch {
+    showAlert(errorText);
+    throw new Error(errorText);
   }
 };
 
@@ -39,4 +34,6 @@ const getData = () => load(Route.GET, ErrorText.GET);
 
 const sendData = (body) => load(Route.POST, ErrorText.POST, Method.POST, body);
 
+// Удаляем автоматическую инициализацию фильтров
+// Фильтры будут инициализироваться после успешной загрузки данных
 export { getData, sendData };
