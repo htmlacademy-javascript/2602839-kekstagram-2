@@ -95,9 +95,14 @@ const onEffectListChange = (evt) => {
   changeSlider(opts);
 
   sliderElement.noUiSlider.on('update', () => {
-    const value = sliderElement.noUiSlider.get();
-    effectLevelValue.value = value;
-    preview.style.filter = `${effectName}(${value}${unitMeasurement})`;
+    const rawValue = sliderElement.noUiSlider.get();
+    const numValue = parseFloat(rawValue);
+
+    // Форматируем значение для отображения
+    const displayValue = numValue % 1 === 0 ? numValue.toString() : rawValue;
+
+    effectLevelValue.value = displayValue;
+    preview.style.filter = `${effectName}(${rawValue}${unitMeasurement})`;
   });
 };
 
