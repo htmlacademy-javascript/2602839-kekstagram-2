@@ -1,7 +1,7 @@
 import { EscKey } from './utils.js';
 import { validateForm, getFormData, resetValidation, showValidationErrors } from './form-validator.js';
 import { sendData } from './api.js';
-import { closeModal, onDocumentKeydown, resetForm } from './form.js';
+import { closeModal, resetForm } from './form.js';
 
 const ButtonClass = {
   ERROR: '.error__button',
@@ -17,7 +17,6 @@ const uploadButton = document.querySelector('.img-upload__submit');
 let successTimer = null;
 let errorTimer = null;
 
-
 const clearMessageTimers = () => {
   if (successTimer) {
     clearTimeout(successTimer);
@@ -29,6 +28,7 @@ const clearMessageTimers = () => {
   }
 };
 
+// ИЗМЕНЕНИЕ: Функция закрытия только сообщения (не формы)
 const closeMessage = () => {
   const successElement = document.querySelector('.success');
   const errorElement = document.querySelector('.error');
@@ -41,24 +41,25 @@ const closeMessage = () => {
   }
 
   clearMessageTimers();
-  window.removeEventListener('keydown', onDocumentKeydownEsc);
+  // Убираем только обработчики сообщения
+  document.removeEventListener('keydown', onMessageKeydown);
   document.removeEventListener('click', onBodyClick);
-  window.addEventListener('keydown', onDocumentKeydown);
 };
 
+// ИЗМЕНЕНИЕ: Отдельный обработчик Esc для сообщений
+function onMessageKeydown(evt) {
+  if (EscKey(evt)) {
+    evt.preventDefault();
+    evt.stopPropagation(); // Важно: предотвращаем всплытие
+    closeMessage();
+  }
+}
 
 function onBodyClick(evt) {
   if (evt.target.closest('.error__inner') || evt.target.closest('.success__inner')) {
     return;
   }
   closeMessage();
-}
-
-function onDocumentKeydownEsc(evt) {
-  if (EscKey(evt)) {
-    evt.preventDefault();
-    closeMessage();
-  }
 }
 
 const showMessage = (template, buttonSelector) => {
@@ -70,7 +71,8 @@ const showMessage = (template, buttonSelector) => {
     button.addEventListener('click', closeMessage);
   }
 
-  document.addEventListener('keydown', onDocumentKeydownEsc);
+  // ИЗМЕНЕНИЕ: Используем отдельный обработчик для сообщений
+  document.addEventListener('keydown', onMessageKeydown);
   document.addEventListener('click', onBodyClick);
 };
 
@@ -94,15 +96,17 @@ const unblockUploadButton = () => {
   uploadButton.textContent = 'Опубликовать';
 };
 
+// ИЗМЕНЕНИЕ: Обработка успешной отправки
 const sendDataSuccess = async (formData) => {
   try {
     blockUploadButton();
     await sendData(formData);
-    closeModal();
+    closeModal(); // Закрываем форму при успехе
     resetForm();
     resetValidation();
     showSuccessMessage();
   } catch (error) {
+    // ИЗМЕНЕНИЕ: При ошибке форма НЕ закрывается
     showErrorMessage();
   } finally {
     unblockUploadButton();
@@ -112,7 +116,6 @@ const sendDataSuccess = async (formData) => {
 const onFormSubmit = async (evt) => {
   evt.preventDefault();
 
-  // Показываем ошибки валидации
   showValidationErrors();
 
   const isValid = validateForm();

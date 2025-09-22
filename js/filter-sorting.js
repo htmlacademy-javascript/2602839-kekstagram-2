@@ -9,7 +9,7 @@ const Filter = {
 };
 
 const RANDOM_PHOTOS_COUNT = 10;
-const FILTER_DEBOUNCE_DELAY = 500; // 500ms задержка
+const FILTER_DEBOUNCE_DELAY = 600; // 600ms задержка
 
 // DOM элементы для фильтров
 const filtersContainer = document.querySelector('.img-filters');

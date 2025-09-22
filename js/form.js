@@ -22,6 +22,9 @@ const descriptionInput = document.querySelector('.text__description');
 
 let scaleNumber;
 
+// ИЗМЕНЕНИЕ: Проверяем, открыто ли сообщение об ошибке
+const isErrorMessageOpen = () => !!document.querySelector('.error');
+
 const getScaleNumber = (scaleString) => parseInt(scaleString.value, 10);
 
 const onMinButtonClick = () => {
@@ -40,32 +43,18 @@ const onMaxButtonClick = () => {
   }
 };
 
-/**
- * Сбрасывает форму к исходному состоянию
- */
 const resetForm = () => {
-  // Сбрасываем масштаб
   scaleValue.value = '100%';
   preview.style.transform = 'scale(1)';
-
-  // Сбрасываем эффект
   changeOriginalEffect();
   const originalEffect = document.querySelector('#effect-none');
   if (originalEffect) {
     originalEffect.checked = true;
   }
-
-  // Очищаем поля ввода
   hashtagsInput.value = '';
   descriptionInput.value = '';
-
-  // Очищаем поле загрузки файла
   fileInput.value = '';
-
-  // Сбрасываем валидацию
   resetValidation();
-
-  // Сбрасываем превью
   preview.src = 'img/upload-default-image.jpg';
   smallPreviews.forEach((smallPreview) => {
     smallPreview.style.backgroundImage = 'url("img/upload-default-image.jpg")';
@@ -91,13 +80,17 @@ const closeModal = () => {
   effectsList.removeEventListener('change', onEffectListChange);
   scaleSmaller.removeEventListener('click', onMinButtonClick);
   scaleBigger.removeEventListener('click', onMaxButtonClick);
-
-  // Сбрасываем форму при закрытии
   resetForm();
 };
 
+// ИЗМЕНЕНИЕ: Улучшенный обработчик Esc
 function onDocumentKeydown(evt) {
   if (EscKey(evt)) {
+    // Если открыто сообщение об ошибке - не закрываем форму
+    if (isErrorMessageOpen()) {
+      return; // Позволяем сообщению об ошибке обработать Esc
+    }
+
     evt.preventDefault();
     closeModal();
   }
