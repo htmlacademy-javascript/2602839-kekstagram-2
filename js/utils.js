@@ -1,4 +1,10 @@
-/**Функция для создания случайного числа в диапозоне от а до b (включительно) */
+/**Функция для создания случайного числа в диапозоне от а до b (включительно)
+ * @param {number} a - нижняя граница диапозона (целое число)
+ * @param {number} b - верхняя граница диапозона (целое число)
+ * @return {number} result - возвращает случайное число в диапозоне от а до b (включительно)
+ * @example
+ * getRandomInteger(1, 5); // Возможные значения: 1, 2, 3, 4, 5
+ */
 const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -6,16 +12,22 @@ const getRandomInteger = (a, b) => {
   return Math.floor(result);
 };
 
-/**Функция для генерации случайного элемента массива */
+/**Функция для генерации случайного элемента массива
+ * @param {Array} element - сам входной массив
+ * @return {*} result - элемент массива element
+ */
 const getRandomElements = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
-/**Фуннкция обнаружения нажатия клавиши "Esc" */
+/**Фуннкция обнаружения нажатия клавиши "Esc"
+ * @param {key} evt - нажата клавиша
+ * @returns {boolean} - ИСТИНА если клавиша "Esc"
+*/
 const EscKey = (evt) => evt.key === 'Escape';
 
 const ALERT_SHOW_TIME = 5000;
 
-/** Показываем ошибку на главной странице */
-const showAlert = (message) => {
+// Показываем ошибку на главной странице
+function showAlert (message) {
   const alert = document.createElement('div');
   alert.style.position = 'absolute';
   alert.style.zIndex = '100';
@@ -30,16 +42,27 @@ const showAlert = (message) => {
   setTimeout(() => {
     alert.remove();
   }, ALERT_SHOW_TIME);
-};
+}
 
-/** Функция debounce для оптимизации частых вызовов */
-const debounce = (callback, timeoutDelay = 600) => {
+// Функция взята из интернета и доработана
+// Источник - https://www.freecodecamp.org/news/javascript-debounce-example
+
+function debounce (callback, timeoutDelay = 600) {
+  // Используем замыкания, чтобы id таймаута у нас навсегда приклеился
+  // к возвращаемой функции с setTimeout, тогда мы его сможем перезаписывать
   let timeoutId;
 
   return (...rest) => {
+    // Перед каждым новым вызовом удаляем предыдущий таймаут,
+    // чтобы они не накапливались
     clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
-  };
-};
 
-export { getRandomElements, getRandomInteger, EscKey, showAlert, debounce };
+    // Затем устанавливаем новый таймаут с вызовом колбэка на ту же задержку
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+
+    // Таким образом цикл «поставить таймаут - удалить таймаут» будет выполняться,
+    // пока действие совершается чаще, чем переданная задержка timeoutDelay
+  };
+}
+
+export {getRandomElements, getRandomInteger, EscKey, showAlert, debounce};
