@@ -1,15 +1,10 @@
-/**
- * Контейнер слайдера уровня эффекта
- */
 const sliderContainer = document.querySelector('.img-upload__effect-level');
 const sliderElement = document.querySelector('.effect-level__slider');
 const effectLevelValue = document.querySelector('.effect-level__value');
 const imagePreview = document.querySelector('.img-upload__preview');
 const preview = imagePreview.querySelector('img');
 
-/**
- * Инициализация слайдера noUiSlider
- */
+/** Инициализация слайдера noUiSlider */
 noUiSlider.create(sliderElement, {
   range: {
     min: 0,
@@ -19,20 +14,14 @@ noUiSlider.create(sliderElement, {
   step: 0.1,
   connect: 'lower',
   format: {
-    to: function (value) {
-      return value.toFixed(1);
-    },
-    from: function (value) {
-      return parseFloat(value);
-    }
+    to: (value) => value.toFixed(1),
+    from: (value) => parseFloat(value)
   }
 });
 
-/**
- * Обновляет параметры слайдера
- */
+/** Обновляет параметры слайдера */
 const changeSlider = (opts) => {
-  const {min, max, step, start} = opts;
+  const { min, max, step, start } = opts;
   sliderElement.noUiSlider.updateOptions({
     range: { min, max },
     step,
@@ -40,18 +29,14 @@ const changeSlider = (opts) => {
   });
 };
 
-/**
- * Применяет эффект "Оригинал"
- */
+/** Применяет эффект "Оригинал" */
 const changeOriginalEffect = () => {
   preview.style.filter = 'none';
   sliderContainer.classList.add('hidden');
   effectLevelValue.value = '';
 };
 
-/**
- * Параметры эффектов
- */
+/** Параметры эффектов */
 const PARAMETRS_EFFECTS = {
   'effect-chrome': {
     opts: { min: 0, max: 1, step: 0.1, start: 1 },
@@ -80,9 +65,7 @@ const PARAMETRS_EFFECTS = {
   }
 };
 
-/**
- * Обработчик изменения эффекта
- */
+/** Обработчик изменения эффекта */
 const onEffectListChange = (evt) => {
   const effect = evt.target.id;
   if (effect === 'effect-none') {
@@ -91,7 +74,7 @@ const onEffectListChange = (evt) => {
   }
 
   sliderContainer.classList.remove('hidden');
-  const {opts, effectName, unitMeasurement} = PARAMETRS_EFFECTS[effect];
+  const { opts, effectName, unitMeasurement } = PARAMETRS_EFFECTS[effect];
   changeSlider(opts);
 
   sliderElement.noUiSlider.on('update', () => {
@@ -101,4 +84,4 @@ const onEffectListChange = (evt) => {
   });
 };
 
-export {changeOriginalEffect, onEffectListChange};
+export { changeOriginalEffect, onEffectListChange };

@@ -1,42 +1,36 @@
-import { showAlert } from './utils.js';
+const BASE_URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
 
-const URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
-
-const Route = {
-  GET: '/data',
-  POST: '/',
-};
-
-const Method = {
-  GET: 'GET',
-  POST: 'POST'
-};
-
-const ErrorText = {
-  GET: 'Не удалось загрузить данные. Попробуйте обновить страницу',
-  POST: 'Не удалось отправить форму. Попробуйте еще раз',
-};
-
-const load = async (route, errorText, method = Method.GET, body = null) => {
+/** Получает данные с сервера */
+const getData = async () => {
   try {
-    const response = await fetch(`${URL}${route}`, {
-      method,
-      body,
-    });
+    const response = await fetch(`${BASE_URL}/data`);
 
     if (!response.ok) {
-      throw new Error(`${errorText}. Status: ${response.status}`);
+      throw new Error(`Ошибка HTTP: ${response.status}`);
     }
 
     return await response.json();
   } catch (error) {
-    showAlert(`${errorText}. ${error.message}`);
-    throw error;
+    throw new Error(`Не удалось загрузить данные: ${error.message}`);
   }
 };
 
-const getData = () => load(Route.GET, ErrorText.GET);
+/** Отправляет данные на сервер */
+const sendData = async (formData) => {
+  try {
+    const response = await fetch(`${BASE_URL}`, {
+      method: 'POST',
+      body: formData,
+    });
 
-const sendData = (body) => load(Route.POST, ErrorText.POST, Method.POST, body);
+    if (!response.ok) {
+      throw new Error(`Ошибка HTTP: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw new Error(`Не удалось отправить данные: ${error.message}`);
+  }
+};
 
 export { getData, sendData };

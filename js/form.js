@@ -1,6 +1,6 @@
 import { EscKey } from './utils.js';
-import { resetValidation} from './form-validator.js';
-import {changeOriginalEffect, onEffectListChange} from './form-slider.js';
+import { resetValidation } from './form-validator.js';
+import { changeOriginalEffect, onEffectListChange } from './form-slider.js';
 
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 const SCALE_STEP = 25;
@@ -20,58 +20,65 @@ const scaleValue = document.querySelector('.scale__control--value');
 const hashtagsInput = document.querySelector('.text__hashtags');
 const descriptionInput = document.querySelector('.text__description');
 
-let scaleNumber;
-
+/** Получает числовое значение масштаба */
 const getScaleNumber = (scaleString) => parseInt(scaleString.value, 10);
 
+/** Обработчик уменьшения масштаба */
 const onMinButtonClick = () => {
-  scaleNumber = getScaleNumber(scaleValue);
-  if(scaleNumber > SCALE_MIN) {
+  const scaleNumber = getScaleNumber(scaleValue);
+  if (scaleNumber > SCALE_MIN) {
     scaleValue.value = `${scaleNumber - SCALE_STEP}%`;
     preview.style.transform = `scale(${(scaleNumber - SCALE_STEP) / 100})`;
   }
 };
 
+/** Обработчик увеличения масштаба */
 const onMaxButtonClick = () => {
-  scaleNumber = getScaleNumber(scaleValue);
-  if(scaleNumber < SCALE_MAX) {
+  const scaleNumber = getScaleNumber(scaleValue);
+  if (scaleNumber < SCALE_MAX) {
     scaleValue.value = `${scaleNumber + SCALE_STEP}%`;
     preview.style.transform = `scale(${(scaleNumber + SCALE_STEP) / 100})`;
   }
 };
 
-/**
- * Сбрасывает форму к исходному состоянию
- */
+/** Сбрасывает форму к исходному состоянию */
 const resetForm = () => {
-  // Сбрасываем масштаб
   scaleValue.value = '100%';
   preview.style.transform = 'scale(1)';
-
-  // Сбрасываем эффект
   changeOriginalEffect();
+
   const originalEffect = document.querySelector('#effect-none');
   if (originalEffect) {
     originalEffect.checked = true;
   }
 
-  // Очищаем поля ввода
   hashtagsInput.value = '';
   descriptionInput.value = '';
-
-  // Очищаем поле загрузки файла
   fileInput.value = '';
-
-  // Сбрасываем валидацию
   resetValidation();
 
-  // Сбрасываем превью
   preview.src = 'img/upload-default-image.jpg';
   smallPreviews.forEach((smallPreview) => {
     smallPreview.style.backgroundImage = 'url("img/upload-default-image.jpg")';
   });
 };
 
+/** Обработчик нажатия клавиши */
+const onDocumentKeydown = (evt) => {
+  if (EscKey(evt)) {
+    evt.preventDefault();
+    closeModal();
+  }
+};
+
+/** Обработчик клика по оверлею */
+const onOverlayClick = (evt) => {
+  if (evt.target === overlay) {
+    closeModal();
+  }
+};
+
+/** Открывает модальное окно */
 const openModal = () => {
   overlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
@@ -83,6 +90,7 @@ const openModal = () => {
   scaleBigger.addEventListener('click', onMaxButtonClick);
 };
 
+/** Закрывает модальное окно */
 const closeModal = () => {
   overlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
@@ -91,29 +99,11 @@ const closeModal = () => {
   effectsList.removeEventListener('change', onEffectListChange);
   scaleSmaller.removeEventListener('click', onMinButtonClick);
   scaleBigger.removeEventListener('click', onMaxButtonClick);
-
-  // Сбрасываем форму при закрытии
   resetForm();
 };
 
-function onDocumentKeydown(evt) {
-  if (EscKey(evt)) {
-    evt.preventDefault();
-    closeModal();
-  }
-}
-
-function onOverlayClick(evt) {
-  if (evt.target === overlay) {
-    closeModal();
-  }
-}
-
-cancelButton.addEventListener('click', () => {
-  closeModal();
-});
-
-fileInput.addEventListener('change', () => {
+/** Обработчик изменения файла */
+const onFileInputChange = () => {
   const file = fileInput.files[0];
   if (!file) {
     return;
@@ -129,6 +119,15 @@ fileInput.addEventListener('change', () => {
     });
     openModal();
   }
-});
+};
 
-export {onDocumentKeydown, closeModal, resetForm};
+/** Инициализация обработчиков событий */
+const initFormHandlers = () => {
+  cancelButton.addEventListener('click', closeModal);
+  fileInput.addEventListener('change', onFileInputChange);
+};
+
+// Инициализация при загрузке модуля
+initFormHandlers();
+
+export { onDocumentKeydown, closeModal, resetForm };
