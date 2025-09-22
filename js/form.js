@@ -91,7 +91,7 @@ const openModal = () => {
 };
 
 /** Закрывает модальное окно */
-function closeModal () {
+const closeModal = () => {
   overlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   window.removeEventListener('keydown', onDocumentKeydown);
@@ -100,7 +100,7 @@ function closeModal () {
   scaleSmaller.removeEventListener('click', onMinButtonClick);
   scaleBigger.removeEventListener('click', onMaxButtonClick);
   resetForm();
-}
+};
 
 /** Обработчик изменения файла */
 const onFileInputChange = () => {
