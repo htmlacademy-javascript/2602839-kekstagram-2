@@ -1,4 +1,4 @@
-import { EscKey } from './utils.js';
+import { isEscKey } from './utils.js';
 import { resetValidation} from './form-validator.js';
 import {changeOriginalEffect, onEffectListChange} from './form-slider.js';
 
@@ -22,7 +22,7 @@ const descriptionInput = document.querySelector('.text__description');
 
 let scaleNumber;
 
-// ИЗМЕНЕНИЕ: Проверяем, открыто ли сообщение об ошибке
+// Проверяем, открыто ли сообщение об ошибке
 const isErrorMessageOpen = () => !!document.querySelector('.error');
 
 const getScaleNumber = (scaleString) => parseInt(scaleString.value, 10);
@@ -85,7 +85,7 @@ const closeModal = () => {
 
 // ИЗМЕНЕНИЕ: Улучшенный обработчик Esc
 function onDocumentKeydown(evt) {
-  if (EscKey(evt)) {
+  if (isEscKey(evt)) {
     // Если открыто сообщение об ошибке - не закрываем форму
     if (isErrorMessageOpen()) {
       return; // Позволяем сообщению об ошибке обработать Esc

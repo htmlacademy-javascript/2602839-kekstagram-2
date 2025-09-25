@@ -2,14 +2,14 @@ import { debounce } from './utils.js';
 import { renderThumbnails } from './thumbnails.js';
 
 // Константы для фильтрации
+const RANDOM_PHOTOS_COUNT = 10;
+const FILTER_DEBOUNCE_DELAY = 600; // 600ms задержка
+
 const Filter = {
   DEFAULT: 'filter-default',
   RANDOM: 'filter-random',
   DISCUSSED: 'filter-discussed'
 };
-
-const RANDOM_PHOTOS_COUNT = 10;
-const FILTER_DEBOUNCE_DELAY = 600; // 600ms задержка
 
 // DOM элементы для фильтров
 const filtersContainer = document.querySelector('.img-filters');

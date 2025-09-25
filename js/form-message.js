@@ -1,14 +1,14 @@
-import { EscKey } from './utils.js';
+import { isEscKey } from './utils.js';
 import { validateForm, getFormData, resetValidation, showValidationErrors } from './form-validator.js';
 import { sendData } from './api.js';
 import { closeModal, resetForm } from './form.js';
+
+const MESSAGE_TIMEOUT = 5000;
 
 const ButtonClass = {
   ERROR: '.error__button',
   SUCCESS: '.success__button',
 };
-
-const MESSAGE_TIMEOUT = 5000;
 
 const successTemplate = document.querySelector('#success');
 const errorTemplate = document.querySelector('#error');
@@ -29,7 +29,7 @@ const clearMessageTimers = () => {
 };
 
 // ИЗМЕНЕНИЕ: Функция закрытия только сообщения (не формы)
-const closeMessage = () => {
+const onCloseButtonClick = () => {
   const successElement = document.querySelector('.success');
   const errorElement = document.querySelector('.error');
 
@@ -48,10 +48,10 @@ const closeMessage = () => {
 
 // ИЗМЕНЕНИЕ: Отдельный обработчик Esc для сообщений
 function onMessageKeydown(evt) {
-  if (EscKey(evt)) {
+  if (isEscKey(evt)) {
     evt.preventDefault();
     evt.stopPropagation(); // Важно: предотвращаем всплытие
-    closeMessage();
+    onCloseButtonClick();
   }
 }
 
@@ -59,7 +59,7 @@ function onBodyClick(evt) {
   if (evt.target.closest('.error__inner') || evt.target.closest('.success__inner')) {
     return;
   }
-  closeMessage();
+  onCloseButtonClick();
 }
 
 const showMessage = (template, buttonSelector) => {
@@ -68,7 +68,7 @@ const showMessage = (template, buttonSelector) => {
 
   const button = document.querySelector(buttonSelector);
   if (button) {
-    button.addEventListener('click', closeMessage);
+    button.addEventListener('click', onCloseButtonClick);
   }
 
   // ИЗМЕНЕНИЕ: Используем отдельный обработчик для сообщений
@@ -78,12 +78,12 @@ const showMessage = (template, buttonSelector) => {
 
 const showSuccessMessage = () => {
   showMessage(successTemplate, ButtonClass.SUCCESS);
-  successTimer = setTimeout(closeMessage, MESSAGE_TIMEOUT);
+  successTimer = setTimeout(onCloseButtonClick, MESSAGE_TIMEOUT);
 };
 
 const showErrorMessage = () => {
   showMessage(errorTemplate, ButtonClass.ERROR);
-  errorTimer = setTimeout(closeMessage, MESSAGE_TIMEOUT);
+  errorTimer = setTimeout(onCloseButtonClick, MESSAGE_TIMEOUT);
 };
 
 const blockUploadButton = () => {
@@ -128,4 +128,4 @@ const onFormSubmit = async (evt) => {
 const imageUploadForm = document.querySelector('.img-upload__form');
 imageUploadForm.addEventListener('submit', onFormSubmit);
 
-export { showSuccessMessage, showErrorMessage, closeMessage, MESSAGE_TIMEOUT };
+export { showSuccessMessage, showErrorMessage, MESSAGE_TIMEOUT };

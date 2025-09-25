@@ -1,4 +1,4 @@
-import { EscKey } from './utils.js';
+import { isEscKey } from './utils.js';
 
 // Константы
 const COMMENTS_PER_PORTION = 5;
@@ -83,7 +83,7 @@ const closeBigPic = () => {
 
 /**Обработчик нажатия клавиши Esc */
 function onDocumentKeydown(evt) {
-  if (EscKey(evt)) {
+  if (isEscKey(evt)) {
     evt.preventDefault();
     closeBigPic();
   }

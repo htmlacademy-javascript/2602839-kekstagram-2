@@ -27,16 +27,16 @@ const pristine = new Pristine(imageUploadForm, {
 /**
  * Нормализует строку хэштегов
  */
-const normalizeString = (value) => {
-  const noNormalizeArray = value.trim().split(' ');
-  return noNormalizeArray.filter((tag) => tag.length > 0);
+const normalizedString = (value) => {
+  const noNormalizedArray = value.trim().split(' ');
+  return noNormalizedArray.filter((tag) => tag.length > 0);
 };
 
 /**
  * Проверяет валидность формата хэштегов
  */
 const isValidateTextHashtag = (textHashtag) => {
-  const tags = normalizeString(textHashtag);
+  const tags = normalizedString(textHashtag);
   if (tags.length === 0) {
     return true;
   } // Пустое поле - валидно
@@ -54,7 +54,7 @@ pristine.addValidator(
  * Проверяет количество хэштегов
  */
 const isValidCountHashtag = (textHashtag) => {
-  const tags = normalizeString(textHashtag);
+  const tags = normalizedString(textHashtag);
   return tags.length <= MAX_HASHTAG_COUNT;
 };
 
@@ -69,7 +69,7 @@ pristine.addValidator(
  * Проверяет уникальность хэштегов
  */
 const isUniqueHashtag = (textHashtag) => {
-  const lowerCase = normalizeString(textHashtag).map((tag) => tag.toLowerCase());
+  const lowerCase = normalizedString(textHashtag).map((tag) => tag.toLowerCase());
   return lowerCase.length === new Set(lowerCase).size;
 };
 

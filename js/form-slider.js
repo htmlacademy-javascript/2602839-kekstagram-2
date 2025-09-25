@@ -8,6 +8,37 @@ const imagePreview = document.querySelector('.img-upload__preview');
 const preview = imagePreview.querySelector('img');
 
 /**
+ * Параметры эффектов
+ */
+const PARAMETRS_EFFECTS = {
+  'effect-chrome': {
+    opts: { min: 0, max: 1, step: 0.1, start: 1 },
+    effectName: 'grayscale',
+    unitMeasurement: '',
+  },
+  'effect-sepia': {
+    opts: { min: 0, max: 1, step: 0.1, start: 1 },
+    effectName: 'sepia',
+    unitMeasurement: '',
+  },
+  'effect-marvin': {
+    opts: { min: 0, max: 100, step: 1, start: 100 },
+    effectName: 'invert',
+    unitMeasurement: '%',
+  },
+  'effect-phobos': {
+    opts: { min: 0, max: 3, step: 0.1, start: 3 },
+    effectName: 'blur',
+    unitMeasurement: 'px',
+  },
+  'effect-heat': {
+    opts: { min: 1, max: 3, step: 0.1, start: 3 },
+    effectName: 'brightness',
+    unitMeasurement: '',
+  }
+};
+
+/**
  * Инициализация слайдера noUiSlider
  */
 noUiSlider.create(sliderElement, {
@@ -47,37 +78,6 @@ const changeOriginalEffect = () => {
   preview.style.filter = 'none';
   sliderContainer.classList.add('hidden');
   effectLevelValue.value = '';
-};
-
-/**
- * Параметры эффектов
- */
-const PARAMETRS_EFFECTS = {
-  'effect-chrome': {
-    opts: { min: 0, max: 1, step: 0.1, start: 1 },
-    effectName: 'grayscale',
-    unitMeasurement: '',
-  },
-  'effect-sepia': {
-    opts: { min: 0, max: 1, step: 0.1, start: 1 },
-    effectName: 'sepia',
-    unitMeasurement: '',
-  },
-  'effect-marvin': {
-    opts: { min: 0, max: 100, step: 1, start: 100 },
-    effectName: 'invert',
-    unitMeasurement: '%',
-  },
-  'effect-phobos': {
-    opts: { min: 0, max: 3, step: 0.1, start: 3 },
-    effectName: 'blur',
-    unitMeasurement: 'px',
-  },
-  'effect-heat': {
-    opts: { min: 1, max: 3, step: 0.1, start: 3 },
-    effectName: 'brightness',
-    unitMeasurement: '',
-  }
 };
 
 /**
