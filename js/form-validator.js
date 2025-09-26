@@ -28,8 +28,8 @@ const pristine = new Pristine(imageUploadForm, {
  * Нормализует строку хэштегов
  */
 const normalizedString = (value) => {
-  const noNormalizedArray = value.trim().split(' ');
-  return noNormalizedArray.filter((tag) => tag.length > 0);
+  const noNormalizedArrays = value.trim().split(' ');
+  return noNormalizedArrays.filter((tag) => tag.length > 0);
 };
 
 /**
